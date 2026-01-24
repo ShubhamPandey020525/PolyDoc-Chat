@@ -1,0 +1,32 @@
+User documents
+   ↓
+loaders.py          (file → text + metadata)
+   ↓
+chunker.py          (text → chunks)
+   ↓
+embedder.py         (chunk → Gemini embedding)
+   ↓
+vectordb.py         (store in Pinecone)
+   ↓
+main.py             (sirf trigger)
+
+
+Har file ka role (1-line each)
+
+loaders.py
+Different file types ko ek common format me convert karta hai
+
+chunker.py
+Long text ko context-safe chunks me todta hai
+
+embedder.py
+Gemini API se semantic embeddings banata hai
+
+vectordb.py
+Pinecone me vectors store karta hai
+
+ingest_pipeline.py
+Sab stages ko jodta hai (real pipeline)
+
+main.py
+Entry point (run yahin se)
