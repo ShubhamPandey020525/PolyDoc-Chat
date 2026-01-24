@@ -1,10 +1,10 @@
 import os
 import uuid
 
-from loaders import load_document
-from chunker import chunk_text
-from embedder import embed_text
-from vectordb import upsert_vectors
+from retrieval.loaders import load_document
+from retrieval.chunker import chunk_text
+from retrieval.embedder import embed_text
+from retrieval.vectordb import upsert_vectors
 
 
 DATA_DIR = "data"
