@@ -1,36 +1,42 @@
+import re
+
+
 def chunk_text(
     text: str,
     chunk_size: int = 800,
     overlap: int = 150
 ):
     """
-    Splits text into overlapping chunks to preserve context.
-
-    Args:
-        text (str): Input text
-        chunk_size (int): Size of each chunk
-        overlap (int): Overlap between consecutive chunks
-
-    Returns:
-        List[str]: List of text chunks
+    Sentence-aware chunking for better semantic retrieval.
     """
 
     if not text or not text.strip():
         return []
 
+    # Split into sentences
+    sentences = re.split(r'(?<=[.!?])\s+', text)
+
     chunks = []
-    text_length = len(text)
-    start = 0
+    current_chunk = []
+    current_length = 0
 
-    while start < text_length:
-        end = start + chunk_size
-        chunk = text[start:end].strip()
+    for sentence in sentences:
+        sentence_length = len(sentence)
 
-        if chunk:
-            chunks.append(chunk)
+        if current_length + sentence_length <= chunk_size:
+            current_chunk.append(sentence)
+            current_length += sentence_length
+        else:
+            chunk = " ".join(current_chunk).strip()
+            if chunk:
+                chunks.append(chunk)
 
-        start = end - overlap
-        if start < 0:
-            start = 0
+            # overlap handling
+            overlap_text = " ".join(current_chunk)[-overlap:]
+            current_chunk = [overlap_text, sentence]
+            current_length = len(overlap_text) + sentence_length
+
+    if current_chunk:
+        chunks.append(" ".join(current_chunk).strip())
 
     return chunks

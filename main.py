@@ -1,14 +1,18 @@
 import os
 import uuid
+import sys
+import subprocess
 
 from retrieval.loaders import load_document
 from retrieval.chunker import chunk_text
 from retrieval.embedder import embed_text
-from retrieval.vectordb import upsert_vectors
+from retrieval.vectordb import upsert_vectors, semantic_search
+from llm.rag_chain import run_rag
 
 
-DATA_DIR = "data"
-
+# =========================
+# INGESTION
+# =========================
 
 def ingest_file(file_path):
     documents = load_document(file_path)
@@ -39,12 +43,53 @@ def ingest_file(file_path):
         upsert_vectors(vectors)
 
 
-def ingest_data_folder(base_dir):
-    for root, _, files in os.walk(base_dir):
-        for file in files:
-            file_path = os.path.join(root, file)
-            ingest_file(file_path)
+def ingest_uploaded_file(file_bytes, filename):
+    temp_path = f"temp_{filename}"
 
+    with open(temp_path, "wb") as f:
+        f.write(file_bytes)
+
+    ingest_file(temp_path)
+
+    if os.path.exists(temp_path):
+        os.remove(temp_path)
+
+
+# =========================
+# RAG QUERY
+# =========================
+
+def ask_question(question, top_k=10):
+    query_vector = embed_text(question)
+
+    if query_vector is None:
+        return "Unable to process your question."
+
+    retrieved_docs = semantic_search(query_vector, top_k=top_k)
+
+    return run_rag(retrieved_docs, question)
+
+
+# =========================
+# UI LAUNCHER
+# =========================
+
+def run_ui():
+    ui_path = os.path.join("ui", "ui.py")
+
+    if not os.path.exists(ui_path):
+        raise FileNotFoundError("ui/ui.py not found")
+
+    subprocess.run(
+        [sys.executable, "-m", "streamlit", "run", ui_path],
+        check=True
+    )
+
+
+# =========================
+# ENTRY POINT
+# =========================
 
 if __name__ == "__main__":
-    ingest_data_folder(DATA_DIR)
+    print("Starting PolyDoc Chat...")
+    run_ui()

@@ -9,7 +9,32 @@ embedder.py         (chunk → Gemini embedding)
 vectordb.py         (store in Pinecone)
    ↓
 main.py             (sirf trigger)
+   ↓
+ llm for question answers
 
+
+
+User query
+   ↓
+embed (Cohere)   ← already built
+   ↓
+Pinecone search ← already built
+   ↓
+retrieved chunks
+   ↓
+LLM (Groq LLaMA-3)
+   ↓
+Answer
+
+
+🚦Order we will follow (important)
+
+1️⃣ llm_client.py → connect LLM
+2️⃣ prompt.py → RAG prompt
+3️⃣ rag_chain.py → glue logic
+4️⃣ retriever.py → query wrapper (if not done)
+5️⃣ main.py → chatbot loop
+6️⃣ Streamlit UI
 
 Har file ka role (1-line each)
 
