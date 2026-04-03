@@ -18,12 +18,12 @@
 
 ## 🌟 Key Features
 
-✅ **Professional Tech Stack**
-✅ **Hybrid Retrieval**
-✅ **Advanced AI**
-✅ **Citations & Sources**
-✅ **Multi-Format Support**
-✅ **Professional UI**
+- ✅ **Professional Tech Stack**
+- ✅ **Hybrid Retrieval**
+- ✅ **Advanced AI**
+- ✅ **Citations & Sources**
+- ✅ **Multi-Format Support**
+- ✅ **Professional UI**
 
 ---
 
