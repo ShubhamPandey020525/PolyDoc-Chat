@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     XAI_BASE_URL: str = os.getenv("XAI_BASE_URL", "https://api.x.ai/v1")
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     COHERE_API_KEY: str = os.getenv("COHERE_API_KEY", "")
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
 
     # Backend Config
     HOST: str = "0.0.0.0"
