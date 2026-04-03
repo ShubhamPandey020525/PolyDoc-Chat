@@ -5,6 +5,7 @@
 # Environment & Credentials
 .env
 .env.*
+!.env.example
 .venv
 env/
 venv/
