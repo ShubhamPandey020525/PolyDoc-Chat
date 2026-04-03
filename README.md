@@ -18,12 +18,12 @@
 
 ## 🌟 Key Features
 
-✅ **Professional Tech Stack**: React + Vite + ShadcnUI frontend and FastAPI backend.
-✅ **Hybrid Retrieval**: Combines semantic and keyword search for superior accuracy.
-✅ **Advanced AI**: Integrated with **xAI Grok-1** for high-quality reasoning and responses.
-✅ **Citations & Sources**: Every answer includes explicit source citations for transparency.
-✅ **Multi-Format Support**: Process PDF, DOCX, TXT, CSV, and XLSX files.
-✅ **Professional UI**: Modern, responsive dashboard with drag-and-drop uploads.
+✅ **Professional Tech Stack**
+✅ **Hybrid Retrieval**
+✅ **Advanced AI**
+✅ **Citations & Sources**
+✅ **Multi-Format Support**
+✅ **Professional UI**
 
 ---
 
