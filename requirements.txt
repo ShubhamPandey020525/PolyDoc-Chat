@@ -1,8 +1,11 @@
 # PolyDoc-Chat Professional AI Core Dependencies
 # Core Frameworks
 langchain>=0.1.0
+langchain-text-splitters>=0.0.1
 langchain-community>=0.0.10
 langchain-openai>=0.0.2
+langchain-chroma>=0.1.0
+langchain-core>=0.1.0
 
 # LLM & API Clients
 openai>=1.10.0
@@ -12,12 +15,14 @@ cohere>=4.40  # For professional reranking
 
 # Vector Database
 chromadb>=0.4.22
-pinecone-client>=3.0.0 # Pro option
+pinecone-client>=3.0.0
+pinecone-client[grpc]
 
 # Document Loading & Parsing
 pymupdf>=1.23.8
 pdfplumber>=0.10.3
-pandas>=2.1.0
+pandas==2.1.4  # Specific version for DLL stability
+numpy<2.0.0    # Required for pandas compatibility
 openpyxl>=3.1.2
 python-docx>=1.1.0
 

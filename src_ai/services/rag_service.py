@@ -1,5 +1,5 @@
 from langchain_openai import ChatOpenAI
-from langchain.schema import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from src_ai.core.config import settings
 from src_ai.core.logger import logger
 from src_ai.retrievers.hybrid_retriever import HybridRetriever
@@ -24,7 +24,7 @@ class CitationFormatter:
         return "\n".join(list(unique))
 
 class GrokQueryEngine:
-    """Professional RAG Service using xAI (Grok) API."""
+    """Professional RAG Service using xAI (Grok) API with Async support."""
     def __init__(self, retriever: HybridRetriever):
         self.retriever = retriever
         self.reranker = Reranker()
@@ -35,14 +35,18 @@ class GrokQueryEngine:
             temperature=0.1
         )
 
-    def process(self, query: str, conversation_history: List[Dict[str, str]] = None) -> Dict[str, Any]:
-        logger.info("Starting professional RAG pipeline with Grok", query=query)
+    async def process(self, query: str, conversation_history: List[Dict[str, str]] = None) -> Dict[str, Any]:
+        logger.info("Starting professional RAG pipeline with Grok (Async)", query=query)
         
-        # 1. Hybrid Retrieval
-        candidates = self.retriever.search(query, top_k=settings.RETRIEVAL_TOP_K)
+        # 1. Hybrid Retrieval (Now Async & Parallel inside HybridRetriever)
+        candidates = await self.retriever.search(query, top_k=settings.RETRIEVAL_TOP_K)
         
-        # 2. Professional Reranking
-        refined_docs = self.reranker.rerank(query, candidates, top_k=settings.RERANK_TOP_K)
+        # 2. Professional Reranking (Async wrapped)
+        loop = asyncio.get_event_loop()
+        refined_docs = await loop.run_in_executor(
+            None,
+            lambda: self.reranker.rerank(query, candidates, top_k=settings.RERANK_TOP_K)
+        )
         
         # 3. Context & Citation Prep
         context_text = "\n\n".join([f"Source {i+1}:\n{doc['content']}" for i, doc in enumerate(refined_docs)])
@@ -64,9 +68,9 @@ CONTEXT:
                 messages.append(HumanMessage(content=content) if role == "user" else SystemMessage(content=content))
         messages.append(HumanMessage(content=query))
         
-        # 5. LLM Call
+        # 5. LLM Call (Using Async invoke)
         try:
-            response = self.llm.invoke(messages)
+            response = await self.llm.ainvoke(messages)
             return {
                 "answer": response.content,
                 "citations": citations,

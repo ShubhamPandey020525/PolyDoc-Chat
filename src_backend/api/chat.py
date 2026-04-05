@@ -12,7 +12,8 @@ async def chat_query(request: ChatRequest):
         raise HTTPException(status_code=503, detail="AI Engine not initialized. Check API keys in .env")
 
     try:
-        result = engine.process(
+        # Now calling async process
+        result = await engine.process(
             query=request.query, 
             conversation_history=request.conversation_history
         )
