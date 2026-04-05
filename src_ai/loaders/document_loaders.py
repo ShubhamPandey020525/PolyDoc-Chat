@@ -1,37 +1,58 @@
 import fitz  # PyMuPDF
 import pandas as pd
 from docx import Document
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 import os
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from src_ai.core.logger import logger
 
+
+def _pdf_extract_page(page_num: int, doc_path: str) -> Dict[str, Any]:
+    """One page per thread; each thread opens its own document (PyMuPDF is not thread-safe on one doc)."""
+    doc = fitz.open(doc_path)
+    try:
+        page = doc[page_num]
+        text = page.get_text()
+    finally:
+        doc.close()
+    return {
+        "content": text,
+        "metadata": {
+            "source": os.path.basename(doc_path),
+            "page_number": page_num + 1,
+            "file_type": "pdf",
+        },
+    }
+
+
+def _load_pdf_pages_threaded(file_path: str) -> List[Dict[str, Any]]:
+    """CPU/IO-bound PDF text extraction parallelized with ThreadPoolExecutor."""
+    doc = fitz.open(file_path)
+    try:
+        num_pages = len(doc)
+    finally:
+        doc.close()
+
+    if num_pages == 0:
+        return []
+
+    cpu = os.cpu_count() or 4
+    max_workers = min(32, num_pages, max(4, cpu * 2))
+
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        # map preserves input order → page order stays correct
+        return list(pool.map(_pdf_extract_page, range(num_pages), [file_path] * num_pages))
+
+
 class DocumentLoader:
     """Consolidated document loader for all professional file types with Parallel Processing."""
-    
+
     @staticmethod
     async def load_pdf_async(file_path: str) -> List[Dict[str, Any]]:
-        """Loads PDF pages in parallel using a thread pool."""
+        """Loads PDF pages in parallel via ThreadPoolExecutor (non-blocking to asyncio event loop)."""
         loop = asyncio.get_event_loop()
-        
-        def _read_pdf():
-            doc = fitz.open(file_path)
-            pages = []
-            for page_num in range(len(doc)):
-                page = doc[page_num]
-                pages.append({
-                    "content": page.get_text(),
-                    "metadata": {
-                        "source": os.path.basename(file_path),
-                        "page_number": page_num + 1,
-                        "file_type": "pdf"
-                    }
-                })
-            doc.close()
-            return pages
-
-        return await loop.run_in_executor(None, _read_pdf)
+        return await loop.run_in_executor(None, _load_pdf_pages_threaded, file_path)
 
     @staticmethod
     async def load_table_async(file_path: str) -> List[Dict[str, Any]]:
@@ -80,13 +101,31 @@ class DocumentLoader:
 
         return await loop.run_in_executor(None, _read_docx)
 
+    @staticmethod
+    async def load_txt_async(file_path: str) -> List[Dict[str, Any]]:
+        """Loads TXT in an async-friendly way."""
+        loop = asyncio.get_event_loop()
+        
+        def _read_txt():
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            return [{
+                "content": content,
+                "metadata": {
+                    "source": os.path.basename(file_path),
+                    "file_type": "txt"
+                }
+            }]
+
+        return await loop.run_in_executor(None, _read_txt)
+
 class LoaderFactory:
-    """Professional Factory to route files to correct loaders asynchronously."""
+    """Professional Factory to handle multi-format document ingestion asynchronously."""
     
     @staticmethod
     async def load_async(file_path: str) -> List[Dict[str, Any]]:
         ext = os.path.splitext(file_path)[1].lower()
-        logger.info(f"Asynchronously loading file: {file_path}")
+        logger.info(f"Asynchronously loading {ext} file: {file_path}")
         
         if ext == '.pdf':
             return await DocumentLoader.load_pdf_async(file_path)
@@ -95,53 +134,7 @@ class LoaderFactory:
         elif ext == '.docx':
             return await DocumentLoader.load_docx_async(file_path)
         elif ext == '.txt':
-            loop = asyncio.get_event_loop()
-            content = await loop.run_in_executor(None, lambda: open(file_path, 'r', encoding='utf-8').read())
-            return [{
-                "content": content,
-                "metadata": {"source": os.path.basename(file_path), "file_type": "txt"}
-            }]
+            return await DocumentLoader.load_txt_async(file_path)
         else:
-            raise ValueError(f"Unsupported file extension: {ext}")
-        content = "\n".join([para.text for para in doc.paragraphs])
-        return [{
-            "content": content,
-            "metadata": {
-                "source": os.path.basename(file_path),
-                "file_type": "docx"
-            }
-        }]
-
-    @staticmethod
-    def load_txt(file_path: str) -> List[Dict[str, Any]]:
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read()
-        return [{
-            "content": content,
-            "metadata": {
-                "source": os.path.basename(file_path),
-                "file_type": "txt"
-            }
-        }]
-
-class LoaderFactory:
-    """Professional Factory to handle multi-format document ingestion."""
-    _LOADERS = {
-        ".pdf": DocumentLoader.load_pdf,
-        ".csv": DocumentLoader.load_table,
-        ".xlsx": DocumentLoader.load_table,
-        ".xls": DocumentLoader.load_table,
-        ".docx": DocumentLoader.load_docx,
-        ".txt": DocumentLoader.load_txt
-    }
-
-    @classmethod
-    def load(cls, file_path: str) -> List[Dict[str, Any]]:
-        ext = os.path.splitext(file_path)[1].lower()
-        loader_func = cls._LOADERS.get(ext)
-        if not loader_func:
             logger.error(f"Unsupported file type: {ext}")
             raise ValueError(f"Unsupported file type: {ext}")
-            
-        logger.info(f"Ingesting {ext} document", path=file_path)
-        return loader_func(file_path)

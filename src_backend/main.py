@@ -9,8 +9,11 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 # -------------------------------------------------------
 
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+import time
 from src_backend.core.config import settings
 from src_backend.core.logger import logger
 from src_backend.api import upload, chat
@@ -19,25 +22,47 @@ from src_backend.api import upload, chat
 from src_ai.retrievers.hybrid_retriever import HybridRetriever
 from src_ai.services.rag_service import GrokQueryEngine
 
-# Initialize shared instances
-# Note: Ye tabhi chalenge jab .env me keys hongi, par error nahi denge start hone par
-try:
-    hybrid_retriever = HybridRetriever(persist_directory=settings.CHROMA_DB_PATH)
-    engine = GrokQueryEngine(retriever=hybrid_retriever)
-except Exception as e:
-    logger.error("AI Core initialization failed (Check .env keys later)", error=str(e))
-    hybrid_retriever = None
-    engine = None
+hybrid_retriever = None
+engine = None
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Async startup/shutdown; keeps event loop responsive (no blocking in startup)."""
+    global hybrid_retriever, engine
+    logger.info("PolyDoc API lifespan: initializing AI core")
+    try:
+        hybrid_retriever = HybridRetriever(persist_directory=settings.CHROMA_DB_PATH)
+        engine = GrokQueryEngine(retriever=hybrid_retriever)
+    except Exception as e:
+        logger.error("AI Core initialization failed (Check .env keys later)", error=str(e))
+        hybrid_retriever = None
+        engine = None
+    yield
+    logger.info("PolyDoc API lifespan: shutdown complete")
+
 
 app = FastAPI(
-    title="PolyDoc Chat API", 
+    title="PolyDoc Chat API",
     version="1.0.0",
-    description="Professional Document Intelligence Backend"
+    description="Professional Document Intelligence Backend",
+    lifespan=lifespan,
 )
 
+# Async Performance Monitoring Middleware
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
+    logger.info(f"Request {request.url.path} processed in {process_time:.4f}s")
+    return response
+
+# Professional CORS & Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=["http://localhost:8080", "http://127.0.0.1:8080"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

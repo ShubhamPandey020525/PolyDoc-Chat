@@ -49,3 +49,15 @@ export async function checkHealth(): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Professional Parallel Data Fetching
+ * Example: Fetching health and other initial data in parallel
+ */
+export async function initializeApp(): Promise<{ health: boolean }> {
+  const [health] = await Promise.all([
+    checkHealth(),
+    // Add other parallel initialization calls here
+  ]);
+  return { health };
+}

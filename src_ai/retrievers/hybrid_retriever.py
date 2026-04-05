@@ -19,17 +19,31 @@ class HybridRetriever:
         self.data_store = []
 
     async def add_documents(self, data: List[Dict[str, Any]]):
-        """Async-friendly document addition."""
+        """Parallel batched document addition (faster ingestion)."""
         loop = asyncio.get_event_loop()
-        texts = [d["content"] for d in data]
-        metadatas = [d["metadata"] for d in data]
+        batch_size = max(1, settings.INDEX_BATCH_SIZE)
         
-        await loop.run_in_executor(None, lambda: self.db.add_texts(texts=texts, metadatas=metadatas))
+        # 1. Create batches
+        batches = [data[i : i + batch_size] for i in range(0, len(data), batch_size)]
         
-        # Setup BM25
+        def _add_batch(batch_data: List[Dict[str, Any]]):
+            texts = [d["content"] for d in batch_data]
+            metadatas = [d["metadata"] for d in batch_data]
+            self.db.add_texts(texts=texts, metadatas=metadatas)
+        
+        # 2. Parallel indexing (Limit concurrency to avoid rate limits or memory pressure)
+        # We'll use a semaphore or just gather if the number of batches isn't too large
+        tasks = [loop.run_in_executor(None, _add_batch, batch) for batch in batches]
+        await asyncio.gather(*tasks)
+
         self.data_store.extend(data)
-        tokenized_corpus = [d["content"].split() for d in self.data_store]
-        self.bm25 = BM25Okapi(tokenized_corpus)
+        
+        # BM25 is CPU bound, run in executor
+        def _init_bm25():
+            tokenized_corpus = [d["content"].split() for d in self.data_store]
+            return BM25Okapi(tokenized_corpus)
+            
+        self.bm25 = await loop.run_in_executor(None, _init_bm25)
 
     async def _vector_search(self, query: str, top_k: int) -> List[Dict[str, Any]]:
         """Async-wrapped semantic search."""

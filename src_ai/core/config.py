@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     CHUNK_OVERLAP: int = 150
     RETRIEVAL_TOP_K: int = 15
     RERANK_TOP_K: int = 5
+    # Chroma / embedding ingest: smaller batches = steadier memory; parallel chunking still fills these fast
+    INDEX_BATCH_SIZE: int = 128
     
     # Infrastructure
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")

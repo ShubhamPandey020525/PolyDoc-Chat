@@ -41,12 +41,8 @@ class GrokQueryEngine:
         # 1. Hybrid Retrieval (Now Async & Parallel inside HybridRetriever)
         candidates = await self.retriever.search(query, top_k=settings.RETRIEVAL_TOP_K)
         
-        # 2. Professional Reranking (Async wrapped)
-        loop = asyncio.get_event_loop()
-        refined_docs = await loop.run_in_executor(
-            None,
-            lambda: self.reranker.rerank(query, candidates, top_k=settings.RERANK_TOP_K)
-        )
+        # 2. Professional Reranking (Now Async natively)
+        refined_docs = await self.reranker.rerank(query, candidates, top_k=settings.RERANK_TOP_K)
         
         # 3. Context & Citation Prep
         context_text = "\n\n".join([f"Source {i+1}:\n{doc['content']}" for i, doc in enumerate(refined_docs)])
