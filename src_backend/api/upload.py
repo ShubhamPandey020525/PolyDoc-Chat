@@ -29,9 +29,9 @@ def _chunk_single_doc(doc: dict) -> list:
 
 @router.post("/upload", response_model=UploadResponse)
 async def upload_document(file: UploadFile = File(...)):
-    from src_backend.main import hybrid_retriever
+    from src_backend.core import state
 
-    if hybrid_retriever is None:
+    if state.hybrid_retriever is None:
         logger.error("Upload failed: AI Core not initialized")
         raise HTTPException(
             status_code=503, 
@@ -52,7 +52,7 @@ async def upload_document(file: UploadFile = File(...)):
         chunk_results = await asyncio.gather(*chunk_tasks)
         chunks = [item for sublist in chunk_results for item in sublist]
 
-        await hybrid_retriever.add_documents(chunks)
+        await state.hybrid_retriever.add_documents(chunks)
         
         return UploadResponse(
             filename=file.filename,

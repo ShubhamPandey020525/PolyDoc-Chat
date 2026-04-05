@@ -17,27 +17,24 @@ import time
 from src_backend.core.config import settings
 from src_backend.core.logger import logger
 from src_backend.api import upload, chat
+from src_backend.core import state
 
 # AI Core Global Instances
 from src_ai.retrievers.hybrid_retriever import HybridRetriever
 from src_ai.services.rag_service import GrokQueryEngine
 
-hybrid_retriever = None
-engine = None
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Async startup/shutdown; keeps event loop responsive (no blocking in startup)."""
-    global hybrid_retriever, engine
     logger.info("PolyDoc API lifespan: initializing AI core")
     try:
-        hybrid_retriever = HybridRetriever(persist_directory=settings.CHROMA_DB_PATH)
-        engine = GrokQueryEngine(retriever=hybrid_retriever)
+        state.hybrid_retriever = HybridRetriever(persist_directory=settings.CHROMA_DB_PATH)
+        state.engine = GrokQueryEngine(retriever=state.hybrid_retriever)
     except Exception as e:
         logger.error("AI Core initialization failed (Check .env keys later)", error=str(e))
-        hybrid_retriever = None
-        engine = None
+        state.hybrid_retriever = None
+        state.engine = None
     yield
     logger.info("PolyDoc API lifespan: shutdown complete")
 

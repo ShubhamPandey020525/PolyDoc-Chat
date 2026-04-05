@@ -6,14 +6,14 @@ router = APIRouter()
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat_query(request: ChatRequest):
-    from src_backend.main import engine
+    from src_backend.core import state
     
-    if engine is None:
+    if state.engine is None:
         raise HTTPException(status_code=503, detail="AI Engine not initialized. Check API keys in .env")
 
     try:
         # Now calling async process
-        result = await engine.process(
+        result = await state.engine.process(
             query=request.query, 
             conversation_history=request.conversation_history
         )
