@@ -14,7 +14,7 @@
 
 ## 🌌 Project Vision
 
-**PolyDoc Chat** is a high-performance **Retrieval-Augmented Generation (RAG)** ecosystem designed to eliminate LLM hallucinations. By enforcing a strict verification protocol, it ensures that every AI-generated response is mathematically grounded in the provided technical documentation.
+**PolyDoc Chat** is a high-performance **Retrieval-Augmented Generation (RAG)** ecosystem designed to eliminate LLM hallucinations. By enforcing a strict verification protocol, it ensures that every AI-generated response is mathematically grounded in the provided technical documentation. It bridges the gap between massive document silos and actionable intelligence without compromising on data integrity or truth.
 
 ---
 
@@ -22,16 +22,26 @@
 
 The system follows a sophisticated multi-stage pipeline to ensure data integrity and retrieval precision:
 
-1.  **High-Speed Ingestion**: Documents are processed using asynchronous Python loaders. The system extracts text and metadata from formats like `PDF`, `DOCX`, and `CSV` while preserving structural hierarchy.
-2.  **Neural Chunking & Semantic Partitioning**: Extracted text is divided into optimized "chunks." This process ensures that context is maintained within each segment for better retrieval accuracy.
-3.  **Local Embedding Generation**: Each chunk is transformed into a high-dimensional vector using the `all-MiniLM-L6-v2` model. This happens **locally** on your machine, ensuring metadata privacy.
-4.  **Vector Store Orchestration (ChromaDB)**: These vectors are stored in a local **ChromaDB** instance. This allows for near-instant similarity searches when a user asks a query.
+1.  **High-Speed Ingestion**: Documents are processed using asynchronous Python loaders. The system extracts text and metadata from formats like `PDF`, `DOCX`, `PPTX`, `CSV`, `Markdown`, and `TXT` while preserving structural hierarchy.
+2.  **Neural Chunking & Semantic Partitioning**: Extracted text is divided into optimized "chunks" (semantic segments). This process ensures that context is maintained within each segment for better retrieval accuracy.
+3.  **Local Embedding Generation**: Each chunk is transformed into a high-dimensional vector using the `sentence-transformers/all-MiniLM-L6-v2` model. This happens **locally** on your machine, ensuring metadata privacy.
+4.  **Vector Store Orchestration (ChromaDB)**: These vectors are stored in a local **ChromaDB** instance with persistent storage capabilities. This allows for near-instant similarity searches when a user asks a query.
 5.  **Context Injection & Prompt Engineering**: Upon a query, the most relevant chunks are retrieved and injected into a secure prompt. This prompt strictly instructs the LLM to only use the provided context.
 6.  **Deterministic Synthesis**: The **Llama 3.3 70B** engine (via Groq API) synthesizes a response. If the answer is not present in the context, the system is hard-coded to report a lack of information rather than guessing.
 
 ---
 
-## 🛡️ Privacy & Security Architecture
+## � Key Technical Features
+
+- **Multi-Format Neural Mapping**: Parallel processing support for PDF, DOCX, PPTX, CSV, TXT, and Markdown.
+- **Source-Grounded Attribution**: Every AI claim is backed by explicit citations, including the filename and exact page or slide number.
+- **Deterministic Verification**: Hard-coded protocols to prevent hallucinations by restricting the model to provided context only.
+- **High-Concurrency Indexing**: Asynchronous backend execution allows for parallel document indexing and high throughput.
+- **Context Source Inspector**: A dedicated UI sheet to inspect the exact document segments utilized by the AI for any given response.
+
+---
+
+## �🛡️ Privacy & Security Architecture
 
 > [!IMPORTANT]
 > **Data Isolation Protocol**: Unlike standard AI tools, PolyDoc Chat generates embeddings locally. Your document's internal structure and metadata never leave your infrastructure. Only specific, encrypted text segments are sent to the inference engine during the final generation phase.
@@ -40,21 +50,41 @@ The system follows a sophisticated multi-stage pipeline to ensure data integrity
 
 ## 🎨 Industrial Design Philosophy
 
-The interface is engineered with a **Cyber-Luxe Midnight Theme**, focusing on high-contrast readability and industrial precision.
-- **Asymmetric Split Layout**: Strategically balances branding with technical utility.
-- **Glassmorphism & Neural Pulses**: Uses Framer Motion for sophisticated state transitions.
-- **Zero-Scroll Architecture**: Optimized ingestion screens that fit perfectly within a single viewport.
+The interface is engineered with a **bespoke Industrial Cyber-Luxe Midnight Theme**, focusing on high-contrast readability and industrial precision.
+- **Asymmetric Split Layout**: Strategically balances branding with technical utility to minimize cognitive load.
+- **Cinematic Animations**: Framer Motion powered blur-transitions, neural pulses, and smooth state synchronizations.
+- **Glassmorphism**: 100% pure-black backgrounds (`#020202`) with high-contrast emerald text and ambient glows.
+- **Zero-Scroll Architecture**: Optimized ingestion and landing screens that fit perfectly within a single viewport.
+- **Neural Field Interface**: A clean, high-fidelity chat interface with automatic smooth-scroll to the latest insights.
 
 ---
 
-## 🛠 Technical Stack
+## 🛠 Technical Stack Details
 
-| Component | Technology | Rationale |
+| Layer | Technology | Rationale |
 | :--- | :--- | :--- |
-| **Frontend** | React 18, TypeScript, Vite | For type-safety and lightning-fast state synchronization. |
-| **Backend** | FastAPI, Python 3.11 | High-concurrency processing for multi-document indexing. |
-| **Inference** | Groq (Llama-3.3-70B) | Industry-leading speed and complex technical reasoning. |
-| **Vector DB** | ChromaDB | Local persistence with persistent storage capabilities. |
+| **Frontend** | React 18, TypeScript, Vite | For type-safety, lightning-fast HMR, and high-performance state management. |
+| **Styling** | Tailwind CSS, Framer Motion | Utility-first approach for the Cyber-Luxe UI with cinematic animations. |
+| **Backend** | FastAPI, Python 3.11 | Asynchronous REST API execution for high throughput and parallel processing. |
+| **Inference** | Groq (Llama-3.3-70B) | Industry-leading inference speed (~200+ tokens/sec) and complex reasoning. |
+| **Vector DB** | ChromaDB | Lightweight, local persistence with persistent vector search capabilities. |
+| **Embeddings** | Sentence-Transformers | Local execution of `all-MiniLM-L6-v2` for maximum data privacy. |
+
+---
+
+## 📂 Project Architecture Flow
+
+```text
+[DOCUMENTS] --> [PARALLEL LOADER] --> [CHUNK GENERATOR] 
+                                            |
+                                            v
+[USER QUERY] --> [EMBEDDING ENGINE] --> [VECTOR SEARCH (ChromaDB)]
+                                            |
+                                            v
+[GROQ API] <--- [PROMPT ORCHESTRATOR] <--- [CONTEXT SEGMENTS]
+    |
+    +-----> [DETERMINISTIC RESPONSE] + [CITATIONS (Page #, File)]
+```
 
 ---
 
@@ -78,6 +108,24 @@ The interface is engineered with a **Cyber-Luxe Midnight Theme**, focusing on hi
   <img src="proofs/5.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
 </div>
 
+---
+
+## 📺 Video Demo (Technical Walkthrough)
+
+> [!TIP]
+> ### 🎥 Project Video Walkthrough
+> **Watch the complete neural orchestration and system flow in this video demonstration:**
+>
+> <div align="center">
+>   <a href="https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing" target="_blank">
+>     <img src="https://img.shields.io/badge/CLICK_TO_WATCH-VIDEO_DEMO-RED?style=for-the-badge&logo=google-drive&logoColor=white" height="60px"/>
+>   </a>
+>   <br/>
+>   <p style="margin-top: 15px;"><b>Click the badge above to watch the technical walkthrough on Google Drive</b></p>
+> </div>
+
+---
+
 ### 🚀 Stage 2: Intelligence Session (Neural Output)
 <div align="center">
   <p><b>06. Deterministic Response Generation</b></p>
@@ -95,22 +143,6 @@ The interface is engineered with a **Cyber-Luxe Midnight Theme**, focusing on hi
   <p><b>09. Secure System Purge Protocol</b></p>
   <img src="proofs/9.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
 </div>
-
----
-
-## 📺 Video Demo (Technical Walkthrough)
-
-> [!TIP]
-> ### 🎥 Project Video Walkthrough
-> **Watch the complete neural orchestration and system flow in this video demonstration:**
->
-> <div align="center">
->   <a href="https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing" target="_blank">
->     <img src="https://img.shields.io/badge/CLICK_TO_WATCH-VIDEO_DEMO-RED?style=for-the-badge&logo=google-drive&logoColor=white" height="60px"/>
->   </a>
->   <br/>
->   <p style="margin-top: 15px;"><b>Click the badge above to watch the technical walkthrough on Google Drive</b></p>
-> </div>
 
 ---
 
