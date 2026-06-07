@@ -1,100 +1,121 @@
-# 🚀 PolyDoc Chat
-### Production-Quality Multi-Document RAG Application
+# �️ PolyDoc Chat: Enterprise Document Intelligence
 
 <div align="center">
+  <img src="proofs/6.png" width="100%" alt="PolyDoc Chat Hero"/>
+  <br/>
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"/>
   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"/>
   <img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white"/>
   <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
   <img src="https://img.shields.io/badge/ChromaDB-Vector%20Search-yellow?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/xAI-Grok--Beta-black?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Llama_3.3-Groq_API-emerald?style=for-the-badge"/>
 </div>
 
-<br/>
+---
 
-**PolyDoc Chat** is a streamlined, high-performance RAG (Retrieval-Augmented Generation) system. It allows users to upload multiple documents and interact with them using **Groq (Llama-3.3-70B)**, ensuring answers are strictly based on the provided context.
+## 📺 Project Showcase
+
+### 🎥 Video Demo
+[**Watch the Full Demonstration on Google Drive**](https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing)
+
+### 📸 Technical Interface
+<div align="center">
+  <p align="center">
+    <b>Intelligence Session & Neural Attribution</b><br/>
+    <img src="proofs/7.png" width="48%" />
+    <img src="proofs/8.png" width="48%" />
+  </p>
+</div>
 
 ---
 
-## 🌟 Key Features
+## 🌌 Overview
 
-- ✅ **Multi-Format Support**: Upload and process PDF, DOCX, PPTX, CSV, TXT, and Markdown files.
-- ✅ **Strict RAG Pipeline**: AI answers only using provided context, preventing hallucinations.
-- ✅ **Multi-Document Chat**: Index multiple files at once and chat with your entire knowledge base.
-- ✅ **Source Citations**: Every answer includes document names and relevant page/slide references.
-- ✅ **Context Viewer**: Inspect the exact document chunks used by the AI to generate answers.
-- ✅ **Persistent Index**: Locally stored ChromaDB ensures your data persists across restarts.
+**PolyDoc Chat** is a high-performance **Retrieval-Augmented Generation (RAG)** ecosystem engineered for deterministic multi-format document analysis. Unlike generic chatbots, PolyDoc is built for **Precision Insight** and **Zero Hallucination**, ensuring every AI-generated response is strictly grounded in your private technical assets.
+
+Designed with a **Cyber-Luxe Midnight UI**, the application provides a seamless, industrial-grade experience for knowledge workers and technical researchers.
 
 ---
 
-## 🧠 System Architecture
+## ⚡ Key Technical Features
 
-```text
-User → React Frontend (Vite) → FastAPI Backend → AI Engine (src_ai)
-                                                  ├── LoaderFactory (Multi-format)
-                                                  ├── ChromaDB (Local Vector Store)
-                                                  └── Groq (Llama-3.3-70B Generation)
-```
+### 🧠 Neural RAG Core
+- **Deterministic Retrieval**: Leverages **ChromaDB** for local vector persistence, ensuring data never leaves your infrastructure during indexing.
+- **Llama 3.3 70B Engine**: Powered by **Groq** for near-instant inference and complex reasoning over multi-page documents.
+- **Neural Mapping**: Advanced document parsing for PDF, DOCX, PPTX, CSV, Markdown, and TXT.
+
+### 🛡️ Privacy & Security
+- **Data Isolation**: Local embedding generation using `sentence-transformers/all-MiniLM-L6-v2`.
+- **Zero-Cloud Indexing**: Your document vectors are stored locally, providing an air-gap security feel for sensitive data.
+
+### 🔍 Verified Attribution
+- **Source Citations**: Every claim is backed by explicit citations (File name + Page/Slide number).
+- **Neural Attribution Sheet**: A dedicated "Context Sources" viewer allows you to inspect the exact document segments used by the AI.
 
 ---
 
-## 📂 Project Structure
+## 🎨 UI/UX: The Cyber-Luxe Interface
 
-```bash
-PolyDoc-Chat/
-├── src_frontend/     # React + TypeScript + Tailwind + ShadcnUI
-│   ├── components/   # UI components (UploadBox, ChatWindow, etc.)
-│   └── lib/          # API services & Shared types
-├── src_backend/      # FastAPI REST API
-│   ├── api/          # Endpoints (upload, chat, clear)
-│   └── core/         # Server state & Config
-├── src_ai/           # RAG Core Logic
-│   ├── loaders/      # Parallel multi-format document loaders
-│   ├── retrievers/   # Similarity search (ChromaDB)
-│   ├── models/       # OpenAI Embeddings
-│   └── services/     # Grok RAG Engine
-├── chroma_db/        # Persistent vector database
-└── .env.example      # Optimized environment template
-```
+The application features a **bespoke Asymmetric Split Layout** designed to maximize efficiency and minimize cognitive load:
+- **Cinematic Midnight Theme**: High-contrast, pure-black backgrounds (`#020202`) with emerald and blue ambient glows.
+- **Deterministic Layout**: Single-page focus with zero scrollbars in the landing and ingestion phases.
+- **Neural Transitions**: Smooth Framer Motion animations (Blur + Scale) between system states.
 
 ---
 
 ## 🛠 Tech Stack
 
-| Layer          | Technology                      |
-| -------------- | ------------------------------- |
-| **Frontend**   | React 18, Vite, TypeScript, TailwindCSS |
-| **Backend**    | FastAPI, Pydantic, Uvicorn      |
-| **AI Engine**  | LangChain, Groq (Llama-3.3-70B), Local Embeddings |
-| **Vector DB**  | ChromaDB (Local Persistence)    |
-| **Parsing**    | PyMuPDF, python-docx, python-pptx, Markdown |
+| Component | Technology | Description |
+| :--- | :--- | :--- |
+| **Frontend** | React 18, Vite, TypeScript | High-performance, type-safe web core. |
+| **Styling** | Tailwind CSS, Framer Motion | Cyber-luxe UI with cinematic animations. |
+| **Backend** | FastAPI, Python 3.11 | Asynchronous REST API for high throughput. |
+| **Vector DB** | ChromaDB | Local persistence for vector search. |
+| **AI Generation**| Groq (Llama-3.3-70B) | State-of-the-art LLM for precise extraction. |
+| **Embeddings** | Sentence Transformers | Efficient local vector generation. |
 
 ---
 
-## 🚀 Getting Started
+## 📂 Project Architecture
 
-### 1. Prerequisites
-- Node.js (v18+)
-- Python (3.11+)
-- API Keys: Groq (Llama-3.3-70B).
-
-### 2. Environment Setup
-Copy the template and add your keys:
-```powershell
-cp .env.example .env
+```bash
+PolyDoc-Chat/
+├── src_frontend/     # React Core (Cinematic UI)
+│   ├── components/   # IngestionMode, IntelligenceSession, ChatField
+│   └── lib/          # API Orchestration & Shared Schemas
+├── src_backend/      # FastAPI Server (Neural Bridge)
+│   ├── api/          # Endpoints for Upload & Intelligence
+│   └── core/         # Server State & Security Config
+├── src_ai/           # Intelligence Core (RAG Pipeline)
+│   ├── loaders/      # Parallel multi-format document loaders
+│   ├── retrievers/   # Similarity search (ChromaDB)
+│   ├── models/       # Local Embedders
+│   └── services/     # RAG Orchestration (Groq Integration)
+├── chroma_db/        # Local Vector Persistence
+└── .env              # Neural Core Configuration
 ```
-Update `.env` with your `GROQ_API_KEY`.
 
-### 3. Installation & Run
+---
 
-**Backend:**
-```powershell
+## � Deployment & Setup
+
+### 1. Environment Preparation
+Ensure you have Python 3.11+ and Node.js 18+ installed.
+
+### 2. Neural Core Configuration
+Create a `.env` file in the root directory:
+```bash
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+### 3. Initialize Backend
+```bash
 pip install -r requirements.txt
 python -m src_backend.main
 ```
 
-**Frontend:**
-```powershell
+### 4. Initialize Frontend
+```bash
 cd src_frontend
 npm install
 npm run dev
@@ -102,10 +123,11 @@ npm run dev
 
 ---
 
-## 📜 Usage Rules
-- **Strict Context**: AI will clearly state if it cannot find the answer in the uploaded documents.
-- **Local Data**: All document chunks and embeddings stay on your machine in the `chroma_db/` folder.
-- **Reset**: Use the "Reset All" button in the UI to wipe the local database and start fresh.
+## � Developer Notes
+PolyDoc Chat was built to solve the "Hallucination Problem" in enterprise documentation. By combining **Local Vector Search** with **Llama 3.3's 70B reasoning**, we provide a tool that doesn't just "chat"—it verifies.
 
 ---
-© 2026 PolyDoc Chat
+<div align="center">
+  <b>Built for the Modern Knowledge Worker</b><br/>
+  <i>Protocol v1.0.4 • Deterministic Intelligence</i>
+</div>
