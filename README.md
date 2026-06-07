@@ -12,42 +12,6 @@
 
 ---
 
-## 📺 Project Showcase & Technical Proofs
-
-### 🎥 Executive Video Demo
-[**Watch the High-Definition Technical Demonstration**](https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing)
-
-### �️ System Gallery (Proof of Ingestion & Processing)
-
-<div align="center">
-  <table>
-    <tr>
-      <td width="50%"><b>01. Landing Architecture</b><br/><img src="proofs/1.png" width="100%"/></td>
-      <td width="50%"><b>02. Neural Ingestion UI</b><br/><img src="proofs/2.png" width="100%"/></td>
-    </tr>
-    <tr>
-      <td width="50%"><b>03. Multi-Format Support</b><br/><img src="proofs/3.png" width="100%"/></td>
-      <td width="50%"><b>04. File Validation Logic</b><br/><img src="proofs/4.png" width="100%"/></td>
-    </tr>
-    <tr>
-      <td width="50%"><b>05. Vector Indexing Process</b><br/><img src="proofs/5.png" width="100%"/></td>
-      <td width="50%"><b>09. System Reset Protocol</b><br/><img src="proofs/9.png" width="100%"/></td>
-    </tr>
-  </table>
-</div>
-
-### 🚀 Neural Core Outputs (RAG Verification)
-<div align="center">
-  <p><b>High-Fidelity Response Generation with Source Attribution</b></p>
-  <img src="proofs/6.png" width="100%" style="margin-bottom: 10px;"/>
-  <div style="display: flex; gap: 10px;">
-    <img src="proofs/7.png" width="49%"/>
-    <img src="proofs/8.png" width="49%"/>
-  </div>
-</div>
-
----
-
 ## 🌌 Project Vision: What is PolyDoc Chat?
 
 **PolyDoc Chat** is not just another chatbot; it is a **Deterministic Knowledge Retrieval Engine**. In an era where LLMs often "hallucinate" (provide false information), PolyDoc Chat enforces a **Strict RAG (Retrieval-Augmented Generation) Protocol**. 
@@ -66,7 +30,7 @@ It allows researchers, engineers, and corporate teams to upload hundreds of page
 5.  **Context Injection**: The most relevant document segments are injected into the prompt of **Llama 3.3 70B** via the **Groq API** (Inference speed: ~200+ tokens/sec).
 6.  **Deterministic Synthesis**: The model is strictly instructed to answer "I don't know" if the answer isn't in the provided segments, eliminating hallucinations.
 
-### �️ Privacy Architecture
+### 🛡️ Privacy Architecture
 - **Air-Gapped Embedding Logic**: Embeddings are calculated on-device.
 - **Metadata Isolation**: Document names and page numbers are stored in a local SQLite-backed vector store.
 - **Encrypted Transmission**: Only the relevant text chunks and the query are sent for generation, never the entire document.
@@ -140,6 +104,44 @@ npm run dev
 
 ## 👤 Developer Notes
 PolyDoc Chat is a solution for **Enterprise Trust**. It bridges the gap between massive document silos and actionable intelligence without compromising on data integrity or truth.
+
+---
+
+## 📺 Project Showcase & Technical Proofs
+
+### 🎥 Executive Video Demo
+[**Watch the High-Definition Technical Demonstration**](https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing)
+
+### 🖼️ System Gallery (Proof of Ingestion & Processing)
+
+<div align="center">
+  <table>
+    <tr>
+      <td width="50%"><b>01. Landing Architecture</b><br/><img src="proofs/1.png" width="100%"/></td>
+      <td width="50%"><b>02. Neural Ingestion UI</b><br/><img src="proofs/2.png" width="100%"/></td>
+    </tr>
+    <tr>
+      <td width="50%"><b>03. Multi-Format Support</b><br/><img src="proofs/3.png" width="100%"/></td>
+      <td width="50%"><b>04. File Validation Logic</b><br/><img src="proofs/4.png" width="100%"/></td>
+    </tr>
+    <tr>
+      <td width="50%"><b>05. Vector Indexing Process</b><br/><img src="proofs/5.png" width="100%"/></td>
+      <td width="50%"><b>09. System Reset Protocol</b><br/><img src="proofs/9.png" width="100%"/></td>
+    </tr>
+  </table>
+</div>
+
+### 🚀 Neural Core Outputs (RAG Verification)
+<div align="center">
+  <p><b>High-Fidelity Response Generation with Source Attribution</b></p>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <img src="proofs/6.png" width="100%" />
+    <div style="display: flex; gap: 10px;">
+      <img src="proofs/7.png" width="49%"/>
+      <img src="proofs/8.png" width="49%"/>
+    </div>
+  </div>
+</div>
 
 ---
 <div align="center">
