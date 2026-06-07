@@ -98,6 +98,52 @@ The interface is engineered with a **Cyber-Luxe Midnight Theme**, focusing on hi
 
 ---
 
+## 🚀 Deployment & Local Setup
+
+Follow these steps to initialize the PolyDoc Intelligent Core on your local infrastructure:
+
+### 1. Environment Preparation (Conda)
+It is recommended to use a dedicated Conda environment to ensure dependency isolation.
+
+```bash
+# Create the neural environment
+conda create -n polydoc python=3.11 -y
+
+# Activate the environment
+conda activate polydoc
+```
+
+### 2. Neural Core Configuration
+Create a `.env` file in the root directory to store your API credentials:
+```bash
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+### 3. Backend Initialization (Neural Bridge)
+Install the Python dependencies and launch the FastAPI server.
+```bash
+# Install RAG and API dependencies
+pip install -r requirements.txt
+
+# Launch the neural backend
+python -m src_backend.main
+```
+
+### 4. Frontend Initialization (Intelligence UI)
+In a new terminal, install the React dependencies and start the development server.
+```bash
+# Navigate to frontend directory
+cd src_frontend
+
+# Install UI dependencies
+npm install
+
+# Launch the cinematic interface
+npm run dev
+```
+
+---
+
 ## 📺 Technical Demonstration
 
 > [!TIP]
