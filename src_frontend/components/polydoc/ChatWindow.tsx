@@ -61,9 +61,10 @@ const ChatWindow = ({ files, onBack }: ChatWindowProps) => {
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, assistantMsg]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Chat failed", error);
-      toast.error("AI response failed. Is the backend running?");
+      const detail = error.response?.data?.detail || "Is the backend running?";
+      toast.error(`AI response failed: ${detail}`);
     } finally {
       setIsLoading(false);
     }

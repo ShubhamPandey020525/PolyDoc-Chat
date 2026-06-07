@@ -52,9 +52,10 @@ const UploadBox = ({ onFilesUploaded, uploadedFiles, onRemoveFile, onStartChat }
         onFilesUploaded(successfulFiles);
         toast.success(`Successfully indexed ${successfulFiles.length} file(s)!`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Upload failed", error);
-      toast.error("Failed to upload documents. Is the backend running?");
+      const detail = error.response?.data?.detail || "Is the backend running?";
+      toast.error(`Upload failed: ${detail}`);
     } finally {
       setIsUploading(false);
     }
