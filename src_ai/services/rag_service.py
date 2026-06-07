@@ -1,4 +1,4 @@
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage
 from src_ai.core.config import settings
 from src_ai.core.logger import logger
@@ -26,18 +26,17 @@ class CitationFormatter:
         return "\n".join(list(unique))
 
 class GrokQueryEngine:
-    """Simple RAG Service using xAI (Grok) API with Async support."""
+    """Simple RAG Service using Groq (Llama 3.3 70B) for ultra-fast generation."""
     def __init__(self, retriever: SimpleRetriever):
         self.retriever = retriever
-        self.llm = ChatOpenAI(
-            model=settings.GROK_MODEL,
-            openai_api_key=settings.XAI_API_KEY,
-            openai_api_base=settings.XAI_BASE_URL,
+        self.llm = ChatGroq(
+            model=settings.GROQ_MODEL,
+            groq_api_key=settings.GROQ_API_KEY,
             temperature=0.1
         )
 
     async def process(self, query: str, conversation_history: List[Dict[str, str]] = None) -> Dict[str, Any]:
-        logger.info("Starting simple RAG pipeline (Async)", query=query)
+        logger.info("Starting Groq RAG pipeline (Llama 3.3)", query=query)
         
         # 1. Similarity Search
         docs = await self.retriever.search(query, top_k=settings.RETRIEVAL_TOP_K)

@@ -6,9 +6,7 @@ load_dotenv()
 
 class Settings(BaseSettings):
     # API Keys & Base URLs
-    XAI_API_KEY: str = os.getenv("XAI_API_KEY", "")
-    XAI_BASE_URL: str = os.getenv("XAI_BASE_URL", "https://api.x.ai/v1")
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
     COHERE_API_KEY: str = os.getenv("COHERE_API_KEY", "")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
 
@@ -20,8 +18,8 @@ class Settings(BaseSettings):
     CHROMA_DB_PATH: str = "./chroma_db"
 
     # AI Config
-    GROK_MODEL: str = "grok-beta"
-    EMBEDDING_MODEL: str = "text-embedding-3-small"
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
+    EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
     CHUNK_SIZE: int = 1000
     CHUNK_OVERLAP: int = 100
     RETRIEVAL_TOP_K: int = 8

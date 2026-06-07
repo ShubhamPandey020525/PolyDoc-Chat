@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
         state.retriever = SimpleRetriever(persist_directory=settings.CHROMA_DB_PATH)
         state.engine = GrokQueryEngine(retriever=state.retriever)
     except Exception as e:
-        logger.error("AI Core initialization failed (Check .env keys later)", error=str(e))
+        logger.error("AI Core initialization failed (Check GROQ_API_KEY in .env)", error=str(e))
         state.retriever = None
         state.engine = None
     yield

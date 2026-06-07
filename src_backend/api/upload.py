@@ -33,7 +33,7 @@ async def upload_documents(files: List[UploadFile] = File(...)):
         logger.error("Upload failed: AI Core not initialized")
         raise HTTPException(
             status_code=503, 
-            detail="AI Core not initialized. Please ensure XAI_API_KEY and OPENAI_API_KEY are set in your .env file."
+            detail="AI Core not initialized. Please ensure GROQ_API_KEY is set in your .env file."
         )
 
     os.makedirs(settings.UPLOAD_DIR, exist_ok=True)

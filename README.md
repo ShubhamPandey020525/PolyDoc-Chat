@@ -12,7 +12,7 @@
 
 <br/>
 
-**PolyDoc Chat** is a streamlined, high-performance RAG (Retrieval-Augmented Generation) system. It allows users to upload multiple documents and interact with them using **xAI Grok-Beta**, ensuring answers are strictly based on the provided context.
+**PolyDoc Chat** is a streamlined, high-performance RAG (Retrieval-Augmented Generation) system. It allows users to upload multiple documents and interact with them using **Groq (Llama-3.3-70B)**, ensuring answers are strictly based on the provided context.
 
 ---
 
@@ -33,7 +33,7 @@
 User → React Frontend (Vite) → FastAPI Backend → AI Engine (src_ai)
                                                   ├── LoaderFactory (Multi-format)
                                                   ├── ChromaDB (Local Vector Store)
-                                                  └── xAI Grok-Beta (Strict Generation)
+                                                  └── Groq (Llama-3.3-70B Generation)
 ```
 
 ---
@@ -65,7 +65,7 @@ PolyDoc-Chat/
 | -------------- | ------------------------------- |
 | **Frontend**   | React 18, Vite, TypeScript, TailwindCSS |
 | **Backend**    | FastAPI, Pydantic, Uvicorn      |
-| **AI Engine**  | LangChain, xAI (Grok-Beta), OpenAI Embeddings |
+| **AI Engine**  | LangChain, Groq (Llama-3.3-70B), Local Embeddings |
 | **Vector DB**  | ChromaDB (Local Persistence)    |
 | **Parsing**    | PyMuPDF, python-docx, python-pptx, Markdown |
 
@@ -76,14 +76,14 @@ PolyDoc-Chat/
 ### 1. Prerequisites
 - Node.js (v18+)
 - Python (3.11+)
-- API Keys: xAI (Grok) and OpenAI (for Embeddings).
+- API Keys: Groq (Llama-3.3-70B).
 
 ### 2. Environment Setup
 Copy the template and add your keys:
 ```powershell
 cp .env.example .env
 ```
-Update `.env` with your `XAI_API_KEY` and `OPENAI_API_KEY`.
+Update `.env` with your `GROQ_API_KEY`.
 
 ### 3. Installation & Run
 
