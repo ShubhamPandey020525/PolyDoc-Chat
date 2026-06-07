@@ -78,20 +78,6 @@ The interface is engineered with a **Cyber-Luxe Midnight Theme**, focusing on hi
   <img src="proofs/5.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
 </div>
 
----
-
-## 📺 Technical Demonstration
-
-> [!TIP]
-> ### 🎥 Project Video Walkthrough
-> **Experience the full neural orchestration in action:**
->
-> [![Watch Video](https://img.shields.io/badge/ACCESS_TECHNICAL_DEMO-RED?style=for-the-badge&logo=google-drive&logoColor=white)](https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing)
->
-> *Click the badge above to open the Google Drive video demonstration.*
-
----
-
 ### 🚀 Stage 2: Intelligence Session (Neural Output)
 <div align="center">
   <p><b>06. Deterministic Response Generation</b></p>
@@ -109,6 +95,22 @@ The interface is engineered with a **Cyber-Luxe Midnight Theme**, focusing on hi
   <p><b>09. Secure System Purge Protocol</b></p>
   <img src="proofs/9.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
 </div>
+
+---
+
+## 📺 Video Demo (Technical Walkthrough)
+
+> [!TIP]
+> ### 🎥 Project Video Walkthrough
+> **Watch the complete neural orchestration and system flow in this video demonstration:**
+>
+> <div align="center">
+>   <a href="https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing" target="_blank">
+>     <img src="https://img.shields.io/badge/CLICK_TO_WATCH-VIDEO_DEMO-RED?style=for-the-badge&logo=google-drive&logoColor=white" height="60px"/>
+>   </a>
+>   <br/>
+>   <p style="margin-top: 15px;"><b>Click the badge above to watch the technical walkthrough on Google Drive</b></p>
+> </div>
 
 ---
 
