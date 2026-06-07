@@ -1,24 +1,33 @@
 import { useRef, useEffect, useState, useCallback } from "react";
-import { ArrowLeft, Loader2, Sparkles } from "lucide-react";
+import { ArrowLeft, Loader2, Sparkles, BookOpen, ChevronRight } from "lucide-react";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import type { ChatMessage as ChatMessageType, UploadedFile } from "@/lib/types";
 import { sendMessage } from "@/lib/api";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const SUGGESTIONS = [
-  "Summarize this document",
-  "Extract key insights",
-  "Explain the data",
-  "Find important numbers",
+  "Summarize these documents",
+  "What are the key takeaways?",
+  "Analyze the data trends",
+  "Compare the documents",
 ];
 
 interface ChatWindowProps {
-  file: UploadedFile;
+  files: UploadedFile[];
   onBack: () => void;
 }
 
-const ChatWindow = ({ file, onBack }: ChatWindowProps) => {
+const ChatWindow = ({ files, onBack }: ChatWindowProps) => {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -37,18 +46,18 @@ const ChatWindow = ({ file, onBack }: ChatWindowProps) => {
       timestamp: new Date(),
     };
     
-    // Optimistically add user message
     setMessages(prev => [...prev, userMsg]);
     setIsLoading(true);
 
     try {
-      // Send message to actual backend with history
-      const { answer, citations } = await sendMessage(content, messages);
+      const { answer, citations, sources } = await sendMessage(content, messages);
       
       const assistantMsg: ChatMessageType = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: answer + (citations ? `\n\n**Sources:**\n${citations}` : ""),
+        content: answer,
+        citations,
+        sources,
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, assistantMsg]);
@@ -61,60 +70,104 @@ const ChatWindow = ({ file, onBack }: ChatWindowProps) => {
   }, [messages]);
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col bg-background">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-border bg-card/80 px-4 py-3 backdrop-blur-sm">
-        <button onClick={onBack} className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+      <div className="flex items-center gap-3 border-b border-border bg-card/50 px-4 py-3 backdrop-blur-md sticky top-0 z-10">
+        <Button variant="ghost" size="icon" onClick={onBack} className="rounded-full">
           <ArrowLeft size={20} />
-        </button>
+        </Button>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-foreground">PolyDoc Chat</p>
-          <p className="truncate text-xs text-muted-foreground">{file.name}</p>
+          <p className="text-sm font-bold text-foreground">PolyDoc Knowledge Base</p>
+          <p className="truncate text-xs text-muted-foreground">
+            {files.length} document(s) active
+          </p>
         </div>
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6">
-        <div className="mx-auto max-w-3xl space-y-6">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6 scroll-smooth">
+        <div className="mx-auto max-w-3xl space-y-8">
           {messages.length === 0 && !isLoading && (
-            <div className="flex flex-col items-center py-12">
-              <div className="mb-4 rounded-2xl bg-gradient-to-br from-orange-100 to-pink-100 p-4">
-                <Sparkles size={28} className="text-orange-500" />
+            <div className="flex flex-col items-center py-20 text-center">
+              <div className="mb-6 rounded-3xl bg-primary/10 p-6 animate-in zoom-in duration-500">
+                <Sparkles size={40} className="text-primary" />
               </div>
-              <h3 className="mb-2 text-lg font-semibold text-foreground">Start a conversation</h3>
-              <p className="mb-8 text-center text-sm text-muted-foreground">
-                Ask anything about your document
+              <h3 className="mb-2 text-2xl font-bold text-foreground">Your AI Assistant is ready</h3>
+              <p className="mb-10 max-w-md text-muted-foreground">
+                Ask specific questions about the uploaded content. I will only use the provided documents to answer.
               </p>
-              <div className="flex flex-wrap justify-center gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg">
                 {SUGGESTIONS.map(s => (
-                  <button
+                  <Button
+                    variant="outline"
                     key={s}
                     onClick={() => handleSend(s)}
-                    className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground shadow-sm transition-all hover:border-primary/30 hover:bg-muted hover:shadow-md"
+                    className="h-auto py-3 px-4 justify-start text-left font-normal rounded-xl hover:bg-primary/5 hover:border-primary/30"
                   >
+                    <ChevronRight size={16} className="mr-2 text-primary" />
                     {s}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
           )}
 
-          {messages.map(msg => (
-            <ChatMessage key={msg.id} message={msg} />
+          {messages.map((msg) => (
+            <div key={msg.id} className="space-y-4">
+              <ChatMessage message={msg} />
+              {msg.role === 'assistant' && msg.sources && msg.sources.length > 0 && (
+                <div className="ml-12 flex items-center gap-2">
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 text-xs gap-2 rounded-full border bg-muted/30">
+                        <BookOpen size={14} />
+                        View Context Sources
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-[400px] sm:w-[540px] overflow-y-auto">
+                      <SheetHeader className="mb-6">
+                        <SheetTitle>Retrieved Context</SheetTitle>
+                        <SheetDescription>
+                          These are the document chunks the AI used to generate its response.
+                        </SheetDescription>
+                      </SheetHeader>
+                      <div className="space-y-6">
+                        {msg.sources.map((source, i) => (
+                          <div key={i} className="rounded-xl border bg-muted/20 p-4 space-y-2">
+                            <div className="flex items-center justify-between text-xs font-semibold text-primary">
+                              <span>Source {i + 1}: {source.metadata.source}</span>
+                              {source.score && <span>Relevance: {(1 - source.score).toFixed(2)}</span>}
+                            </div>
+                            <p className="text-sm leading-relaxed text-muted-foreground">
+                              "{source.content}"
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                  {msg.citations && msg.citations.trim() && (
+                    <span className="text-[10px] text-muted-foreground bg-muted px-2 py-0.5 rounded-full border">
+                      Citations: {msg.citations.split('\n').filter(c => c.trim()).length}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
           ))}
 
           {isLoading && (
-            <div className="flex gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card shadow-sm">
-                <Loader2 size={14} className="animate-spin text-primary" />
+            <div className="flex gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border bg-card shadow-sm">
+                <Loader2 size={18} className="animate-spin text-primary" />
               </div>
-              <div className="rounded-2xl border border-border bg-card px-4 py-3 shadow-sm">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>AI is thinking</span>
-                  <span className="flex gap-0.5">
-                    <span className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-primary/60" style={{ animationDelay: '0ms' }} />
-                    <span className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-primary/60" style={{ animationDelay: '150ms' }} />
-                    <span className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-primary/60" style={{ animationDelay: '300ms' }} />
+              <div className="rounded-2xl border bg-card px-5 py-4 shadow-sm max-w-[80%]">
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <span className="font-medium">AI is analyzing context...</span>
+                  <span className="flex gap-1">
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary/40" style={{ animationDelay: '0ms' }} />
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary/40" style={{ animationDelay: '150ms' }} />
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary/40" style={{ animationDelay: '300ms' }} />
                   </span>
                 </div>
               </div>
@@ -124,7 +177,11 @@ const ChatWindow = ({ file, onBack }: ChatWindowProps) => {
       </div>
 
       {/* Input */}
-      <ChatInput onSend={handleSend} isLoading={isLoading} />
+      <div className="border-t border-border bg-card/30 p-4 backdrop-blur-md">
+        <div className="mx-auto max-w-3xl">
+          <ChatInput onSend={handleSend} isLoading={isLoading} />
+        </div>
+      </div>
     </div>
   );
 };

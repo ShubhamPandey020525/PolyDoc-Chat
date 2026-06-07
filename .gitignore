@@ -38,6 +38,20 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Frontend specific
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # AI & Backend specific
 src_backend/uploads/*
 !src_backend/uploads/.gitkeep

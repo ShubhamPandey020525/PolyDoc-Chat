@@ -32,25 +32,23 @@ const ChatInput = ({ onSend, isLoading }: ChatInputProps) => {
   };
 
   return (
-    <div className="border-t border-border bg-card/80 p-4 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-3xl items-end gap-3 rounded-2xl border border-border bg-card p-2 shadow-sm">
-        <textarea
-          ref={textareaRef}
-          value={value}
-          onChange={e => setValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask a question about your document..."
-          rows={1}
-          className="flex-1 resize-none bg-transparent px-2 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-        />
-        <button
-          onClick={handleSend}
-          disabled={!value.trim() || isLoading}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md disabled:opacity-40 disabled:hover:scale-100"
-        >
-          <Send size={16} />
-        </button>
-      </div>
+    <div className="mx-auto flex w-full max-w-3xl items-end gap-3 rounded-2xl border border-border bg-card p-2 shadow-sm focus-within:border-primary/50 transition-colors">
+      <textarea
+        ref={textareaRef}
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="Ask a question about your documents..."
+        rows={1}
+        className="flex-1 resize-none bg-transparent px-2 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+      />
+      <button
+        onClick={handleSend}
+        disabled={!value.trim() || isLoading}
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md disabled:opacity-40 disabled:hover:scale-100"
+      >
+        <Send size={18} />
+      </button>
     </div>
   );
 };

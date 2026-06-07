@@ -20,13 +20,11 @@ class Settings(BaseSettings):
     CHROMA_DB_PATH: str = "./chroma_db"
 
     # AI Config
-    GROK_MODEL: str = "grok-1"
+    GROK_MODEL: str = "grok-beta"
     EMBEDDING_MODEL: str = "text-embedding-3-small"
-    RERANKER_MODEL: str = "rerank-english-v3.0"
-    CHUNK_SIZE: int = 1200
-    CHUNK_OVERLAP: int = 150
-    RETRIEVAL_TOP_K: int = 15
-    RERANK_TOP_K: int = 5
+    CHUNK_SIZE: int = 1000
+    CHUNK_OVERLAP: int = 100
+    RETRIEVAL_TOP_K: int = 8
 
     class Config:
         env_file = ".env"

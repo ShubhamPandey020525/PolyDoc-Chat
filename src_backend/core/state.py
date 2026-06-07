@@ -1,7 +1,7 @@
 from typing import Optional
-from src_ai.retrievers.hybrid_retriever import HybridRetriever
+from src_ai.retrievers.simple_retriever import SimpleRetriever
 from src_ai.services.rag_service import GrokQueryEngine
 
 # Global instances for the backend application
-hybrid_retriever: Optional[HybridRetriever] = None
+retriever: Optional[SimpleRetriever] = None
 engine: Optional[GrokQueryEngine] = None

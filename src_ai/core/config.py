@@ -13,20 +13,17 @@ class Settings(BaseSettings):
     COHERE_API_KEY: str = os.getenv("COHERE_API_KEY", "")
     
     # Model Selection
-    GROK_MODEL: str = "grok-1" 
+    GROK_MODEL: str = "grok-beta" 
     EMBEDDING_MODEL: str = "text-embedding-3-small"
-    RERANKER_MODEL: str = "rerank-english-v3.0"
     
     # Vector DB Configuration
-    CHROMA_DB_PATH: str = "./chroma_db"
-    COLLECTION_NAME: str = "polydoc_professional_v2"
+    CHROMA_DB_PATH: str = os.getenv("CHROMA_DB_PATH", "./chroma_db")
+    COLLECTION_NAME: str = "polydoc_v3"
     
     # RAG Hyperparameters
-    CHUNK_SIZE: int = 1200
-    CHUNK_OVERLAP: int = 150
-    RETRIEVAL_TOP_K: int = 15
-    RERANK_TOP_K: int = 5
-    # Chroma / embedding ingest: smaller batches = steadier memory; parallel chunking still fills these fast
+    CHUNK_SIZE: int = 1000
+    CHUNK_OVERLAP: int = 100
+    RETRIEVAL_TOP_K: int = 8
     INDEX_BATCH_SIZE: int = 128
     
     # Infrastructure

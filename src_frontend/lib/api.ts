@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { ChatMessage } from '@/lib/types';
+import type { ChatMessage, DocumentSource } from '@/lib/types';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -10,11 +10,13 @@ const api = axios.create({
   },
 });
 
-export async function uploadFile(file: File): Promise<{ filename: string; message: string }> {
+export async function uploadFiles(files: File[]): Promise<{ files: { filename: string; message: string; status: string }[] }> {
   const formData = new FormData();
-  formData.append('file', file);
+  files.forEach(file => {
+    formData.append('files', file);
+  });
 
-  const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
+  const response = await api.post('/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -23,10 +25,14 @@ export async function uploadFile(file: File): Promise<{ filename: string; messag
   return response.data;
 }
 
+export async function clearKnowledgeBase(): Promise<void> {
+  await api.delete('/clear');
+}
+
 export async function sendMessage(
   query: string, 
   history: ChatMessage[] = []
-): Promise<{ answer: string; citations: string; sources: any[] }> {
+): Promise<{ answer: string; citations: string; sources: DocumentSource[] }> {
   // Convert frontend message format to backend history format
   const conversation_history = history.map(msg => ({
     role: msg.role,

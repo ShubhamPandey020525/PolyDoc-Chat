@@ -14,3 +14,6 @@ class UploadResponse(BaseModel):
     filename: str
     status: str
     message: str
+
+class MultiUploadResponse(BaseModel):
+    files: List[UploadResponse]
