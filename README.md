@@ -107,40 +107,47 @@ PolyDoc Chat is a solution for **Enterprise Trust**. It bridges the gap between 
 
 ---
 
-## 📺 Project Showcase & Technical Proofs
+## � Technical Proofs & System Gallery
 
-### 🎥 Executive Video Demo
-[**Watch the High-Definition Technical Demonstration**](https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing)
-
-### 🖼️ System Gallery (Proof of Ingestion & Processing)
-
+### 🚀 Neural Core Outputs (High-Fidelity RAG)
 <div align="center">
-  <table>
-    <tr>
-      <td width="50%"><b>01. Landing Architecture</b><br/><img src="proofs/1.png" width="100%"/></td>
-      <td width="50%"><b>02. Neural Ingestion UI</b><br/><img src="proofs/2.png" width="100%"/></td>
-    </tr>
-    <tr>
-      <td width="50%"><b>03. Multi-Format Support</b><br/><img src="proofs/3.png" width="100%"/></td>
-      <td width="50%"><b>04. File Validation Logic</b><br/><img src="proofs/4.png" width="100%"/></td>
-    </tr>
-    <tr>
-      <td width="50%"><b>05. Vector Indexing Process</b><br/><img src="proofs/5.png" width="100%"/></td>
-      <td width="50%"><b>09. System Reset Protocol</b><br/><img src="proofs/9.png" width="100%"/></td>
-    </tr>
-  </table>
+  <p><b>Visual Proof of Deterministic Response & Neural Attribution</b></p>
+  <img src="proofs/6.png" width="100%" style="border-radius: 10px; margin-bottom: 20px; border: 1px solid #333;"/>
+  <img src="proofs/7.png" width="100%" style="border-radius: 10px; margin-bottom: 20px; border: 1px solid #333;"/>
+  <img src="proofs/8.png" width="100%" style="border-radius: 10px; margin-bottom: 20px; border: 1px solid #333;"/>
 </div>
 
-### 🚀 Neural Core Outputs (RAG Verification)
+### 🖼️ Operational Workflow (Step-by-Step)
 <div align="center">
-  <p><b>High-Fidelity Response Generation with Source Attribution</b></p>
-  <div style="display: flex; flex-direction: column; gap: 10px;">
-    <img src="proofs/6.png" width="100%" />
-    <div style="display: flex; gap: 10px;">
-      <img src="proofs/7.png" width="49%"/>
-      <img src="proofs/8.png" width="49%"/>
-    </div>
-  </div>
+  <p><b>01. Strategic Landing Architecture</b></p>
+  <img src="proofs/1.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  
+  <p><b>02. Neural Ingestion Protocol</b></p>
+  <img src="proofs/2.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  
+  <p><b>03. Multi-Format Asset Processing</b></p>
+  <img src="proofs/3.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  
+  <p><b>04. Context Validation Logic</b></p>
+  <img src="proofs/4.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  
+  <p><b>05. Vector Space Indexing</b></p>
+  <img src="proofs/5.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  
+  <p><b>09. Secure Purge Protocol</b></p>
+  <img src="proofs/9.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+</div>
+
+---
+
+## � Project Demonstration
+
+<div align="center">
+  <a href="https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing" target="_blank">
+    <img src="https://img.shields.io/badge/CLICK_TO_WATCH-VIDEO_DEMO-red?style=for-the-badge&logo=google-drive&logoColor=white" height="50px"/>
+  </a>
+  <br/>
+  <p style="margin-top: 10px;"><b>Click the badge above to watch the full technical walkthrough on Google Drive</b></p>
 </div>
 
 ---
