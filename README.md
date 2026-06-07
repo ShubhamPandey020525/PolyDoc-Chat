@@ -12,146 +12,104 @@
 
 ---
 
-## 🌌 Project Vision: What is PolyDoc Chat?
+## 🌌 Project Vision
 
-**PolyDoc Chat** is not just another chatbot; it is a **Deterministic Knowledge Retrieval Engine**. In an era where LLMs often "hallucinate" (provide false information), PolyDoc Chat enforces a **Strict RAG (Retrieval-Augmented Generation) Protocol**. 
-
-It allows researchers, engineers, and corporate teams to upload hundreds of pages of technical documentation and interact with them using **Llama 3.3 70B** intelligence, ensuring every answer is mathematically derived from the provided context—never from the model's training data alone.
+**PolyDoc Chat** is a high-performance **Retrieval-Augmented Generation (RAG)** ecosystem designed to eliminate LLM hallucinations. By enforcing a strict verification protocol, it ensures that every AI-generated response is mathematically grounded in the provided technical documentation.
 
 ---
 
-## ⚡ Technical Depth & Core Logic
+## ⚙️ How the RAG Pipeline Functions (Core Logic)
 
-### 🧠 The RAG Pipeline (How it works)
-1.  **Ingestion & Parsing**: Parallel processing of `PDF`, `DOCX`, `PPTX`, `CSV`, `Markdown`, and `TXT` using high-performance Python libraries.
-2.  **Neural Chunking**: Documents are split into semantic segments to preserve context.
-3.  **Local Embedding Generation**: Vectors are generated locally using `all-MiniLM-L6-v2`, ensuring that sensitive metadata never leaves your machine.
-4.  **Vector Store Orchestration**: **ChromaDB** persists these vectors locally for near-instant similarity searches.
-5.  **Context Injection**: The most relevant document segments are injected into the prompt of **Llama 3.3 70B** via the **Groq API** (Inference speed: ~200+ tokens/sec).
-6.  **Deterministic Synthesis**: The model is strictly instructed to answer "I don't know" if the answer isn't in the provided segments, eliminating hallucinations.
+The system follows a sophisticated multi-stage pipeline to ensure data integrity and retrieval precision:
 
-### 🛡️ Privacy Architecture
-- **Air-Gapped Embedding Logic**: Embeddings are calculated on-device.
-- **Metadata Isolation**: Document names and page numbers are stored in a local SQLite-backed vector store.
-- **Encrypted Transmission**: Only the relevant text chunks and the query are sent for generation, never the entire document.
+1.  **High-Speed Ingestion**: Documents are processed using asynchronous Python loaders. The system extracts text and metadata from formats like `PDF`, `DOCX`, and `CSV` while preserving structural hierarchy.
+2.  **Neural Chunking & Semantic Partitioning**: Extracted text is divided into optimized "chunks." This process ensures that context is maintained within each segment for better retrieval accuracy.
+3.  **Local Embedding Generation**: Each chunk is transformed into a high-dimensional vector using the `all-MiniLM-L6-v2` model. This happens **locally** on your machine, ensuring metadata privacy.
+4.  **Vector Store Orchestration (ChromaDB)**: These vectors are stored in a local **ChromaDB** instance. This allows for near-instant similarity searches when a user asks a query.
+5.  **Context Injection & Prompt Engineering**: Upon a query, the most relevant chunks are retrieved and injected into a secure prompt. This prompt strictly instructs the LLM to only use the provided context.
+6.  **Deterministic Synthesis**: The **Llama 3.3 70B** engine (via Groq API) synthesizes a response. If the answer is not present in the context, the system is hard-coded to report a lack of information rather than guessing.
 
 ---
 
-## 🎨 UI/UX: Cyber-Luxe Midnight Design
-The application features a **bespoke Industrial Design** built to minimize cognitive load while looking like a high-end technical terminal:
-- **Asymmetric Layout**: Shifts the visual priority between branding and utility.
-- **Cinematic Animations**: Framer Motion powered blur-transitions and neural pulses.
-- **Glassmorphism**: 100% pure-black backgrounds (`#020202`) with high-contrast emerald text for maximum readability.
+## 🛡️ Privacy & Security Architecture
+
+> [!IMPORTANT]
+> **Data Isolation Protocol**: Unlike standard AI tools, PolyDoc Chat generates embeddings locally. Your document's internal structure and metadata never leave your infrastructure. Only specific, encrypted text segments are sent to the inference engine during the final generation phase.
 
 ---
 
-## 🛠 Tech Stack Details
+## 🎨 Industrial Design Philosophy
 
-| Layer | Technology | Rationale |
+The interface is engineered with a **Cyber-Luxe Midnight Theme**, focusing on high-contrast readability and industrial precision.
+- **Asymmetric Split Layout**: Strategically balances branding with technical utility.
+- **Glassmorphism & Neural Pulses**: Uses Framer Motion for sophisticated state transitions.
+- **Zero-Scroll Architecture**: Optimized ingestion screens that fit perfectly within a single viewport.
+
+---
+
+## 🛠 Technical Stack
+
+| Component | Technology | Rationale |
 | :--- | :--- | :--- |
-| **Frontend** | React 18 (Vite) | Lightning-fast HMR and high-performance state management. |
-| **Styles** | Tailwind CSS | Utility-first approach for the Cyber-Luxe UI. |
-| **Backend** | FastAPI (Python) | Asynchronous execution for parallel document indexing. |
-| **LLM Engine** | Groq (Llama-3.3-70B) | State-of-the-art inference speed and reasoning. |
-| **Vector DB** | ChromaDB | Lightweight, persistent, and developer-friendly local DB. |
-| **Embeddings** | Sentence-Transformers | Local execution for data privacy. |
+| **Frontend** | React 18, TypeScript, Vite | For type-safety and lightning-fast state synchronization. |
+| **Backend** | FastAPI, Python 3.11 | High-concurrency processing for multi-document indexing. |
+| **Inference** | Groq (Llama-3.3-70B) | Industry-leading speed and complex technical reasoning. |
+| **Vector DB** | ChromaDB | Local persistence with persistent storage capabilities. |
 
 ---
 
-## 📂 Project Architecture Flow
+## � System Walkthrough & Technical Proofs
 
-```text
-[DOCUMENTS] --> [PARALLEL LOADER] --> [CHUNK GENERATOR] 
-                                            |
-                                            v
-[USER QUERY] --> [EMBEDDING ENGINE] --> [VECTOR SEARCH (ChromaDB)]
-                                            |
-                                            v
-[GROQ API] <--- [PROMPT ORCHESTRATOR] <--- [CONTEXT SEGMENTS]
-    |
-    +-----> [DETERMINISTIC RESPONSE] + [CITATIONS (Page #, File)]
-```
-
----
-
-## 🚀 Installation & Neural Core Setup
-
-### 1. Requirements
-- Python 3.11+
-- Node.js 18+
-- Groq API Key
-
-### 2. Environment Config
-Create a `.env` in the root:
-```bash
-GROQ_API_KEY=your_secure_key_here
-```
-
-### 3. Start Neural Backend
-```bash
-pip install -r requirements.txt
-python -m src_backend.main
-```
-
-### 4. Start Intelligence Frontend
-```bash
-cd src_frontend
-npm install
-npm run dev
-```
-
----
-
-## 👤 Developer Notes
-PolyDoc Chat is a solution for **Enterprise Trust**. It bridges the gap between massive document silos and actionable intelligence without compromising on data integrity or truth.
-
----
-
-## � Technical Proofs & System Gallery
-
-### 🚀 Neural Core Outputs (High-Fidelity RAG)
+### 🖼️ Stage 1: Strategic Ingestion & Validation
 <div align="center">
-  <p><b>Visual Proof of Deterministic Response & Neural Attribution</b></p>
-  <img src="proofs/6.png" width="100%" style="border-radius: 10px; margin-bottom: 20px; border: 1px solid #333;"/>
-  <img src="proofs/7.png" width="100%" style="border-radius: 10px; margin-bottom: 20px; border: 1px solid #333;"/>
-  <img src="proofs/8.png" width="100%" style="border-radius: 10px; margin-bottom: 20px; border: 1px solid #333;"/>
-</div>
-
-### 🖼️ Operational Workflow (Step-by-Step)
-<div align="center">
-  <p><b>01. Strategic Landing Architecture</b></p>
-  <img src="proofs/1.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  <p><b>01. Protocol Landing Interface</b></p>
+  <img src="proofs/1.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
   
-  <p><b>02. Neural Ingestion Protocol</b></p>
-  <img src="proofs/2.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  <p><b>02. Neural Asset Ingestion Mode</b></p>
+  <img src="proofs/2.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
   
-  <p><b>03. Multi-Format Asset Processing</b></p>
-  <img src="proofs/3.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  <p><b>03. Multi-Format Support Verification</b></p>
+  <img src="proofs/3.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
   
   <p><b>04. Context Validation Logic</b></p>
-  <img src="proofs/4.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  <img src="proofs/4.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
   
-  <p><b>05. Vector Space Indexing</b></p>
-  <img src="proofs/5.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  <p><b>05. Vector Space Mapping</b></p>
+  <img src="proofs/5.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
+</div>
+
+### 🚀 Stage 2: Intelligence Session (Neural Output)
+<div align="center">
+  <p><b>06. Deterministic Response Generation</b></p>
+  <img src="proofs/6.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
   
-  <p><b>09. Secure Purge Protocol</b></p>
-  <img src="proofs/9.png" width="100%" style="border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;"/>
+  <p><b>07. Source Attribution & Citations</b></p>
+  <img src="proofs/7.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
+  
+  <p><b>08. Technical Context Breakdown</b></p>
+  <img src="proofs/8.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
+</div>
+
+### 🧹 Stage 3: Maintenance & Reset
+<div align="center">
+  <p><b>09. Secure System Purge Protocol</b></p>
+  <img src="proofs/9.png" width="100%" style="border-radius: 8px; border: 1px solid #333; margin-bottom: 20px;"/>
 </div>
 
 ---
 
-## � Project Demonstration
+## 📺 Technical Demonstration
 
-<div align="center">
-  <a href="https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing" target="_blank">
-    <img src="https://img.shields.io/badge/CLICK_TO_WATCH-VIDEO_DEMO-red?style=for-the-badge&logo=google-drive&logoColor=white" height="50px"/>
-  </a>
-  <br/>
-  <p style="margin-top: 10px;"><b>Click the badge above to watch the full technical walkthrough on Google Drive</b></p>
-</div>
+> [!TIP]
+> ### 🎥 Project Video Walkthrough
+> **Experience the full neural orchestration in action:**
+>
+> [![Watch Video](https://img.shields.io/badge/ACCESS_TECHNICAL_DEMO-RED?style=for-the-badge&logo=google-drive&logoColor=white)](https://drive.google.com/file/d/1OC8cCQStC2aNMuUsHrMRrLizzVDsNH7d/view?usp=sharing)
+>
+> *Click the badge above to open the Google Drive video demonstration.*
 
 ---
 <div align="center">
-  <b>Built for the Modern Knowledge Worker</b><br/>
-  <i>Protocol v1.0.4 • High-Fidelity Intelligence • Deterministic Retrieval</i>
+  <b>PolyDoc Intelligent Core v1.0.4</b><br/>
+  <i>Built for Precise Knowledge Retrieval • 2024</i>
 </div>
