@@ -1,4 +1,4 @@
-# 🛡️ PolyDoc Chat: Enterprise-Grade Document Intelligence Ecosystem
+# PolyDoc Chat: Enterprise-Grade Document Intelligence Ecosystem
 
 <div align="center">
   <img src="https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"/>
@@ -12,13 +12,27 @@
 
 ---
 
-## 🌌 Project Vision
+## Table of Contents
+- [Project Vision](#project-vision)
+- [How the RAG Pipeline Functions](#how-the-rag-pipeline-functions-core-logic)
+- [Key Technical Features](#key-technical-features)
+- [Privacy & Security Architecture](#privacy--security-architecture)
+- [Pipeline Methods & Evaluation Metrics](#pipeline-methods--evaluation-metrics)
+- [Usage Examples](#usage-examples)
+- [Project Structure](#project-structure)
+- [Deployment & Local Setup](#deployment--local-setup)
+- [Troubleshooting](#troubleshooting)
+- [Acknowledgments](#acknowledgments)
+
+---
+
+## Project Vision
 
 **PolyDoc Chat** is a high-performance **Retrieval-Augmented Generation (RAG)** ecosystem designed to eliminate LLM hallucinations. By enforcing a strict verification protocol, it ensures that every AI-generated response is mathematically grounded in the provided technical documentation. It bridges the gap between massive document silos and actionable intelligence without compromising on data integrity or truth.
 
 ---
 
-## ⚙️ How the RAG Pipeline Functions (Core Logic)
+## How the RAG Pipeline Functions (Core Logic)
 
 The system follows a sophisticated multi-stage pipeline to ensure data integrity and retrieval precision:
 
@@ -31,7 +45,7 @@ The system follows a sophisticated multi-stage pipeline to ensure data integrity
 
 ---
 
-## � Key Technical Features
+## Key Technical Features
 
 - **Multi-Format Neural Mapping**: Parallel processing support for PDF, DOCX, PPTX, CSV, TXT, and Markdown.
 - **Source-Grounded Attribution**: Every AI claim is backed by explicit citations, including the filename and exact page or slide number.
@@ -41,7 +55,7 @@ The system follows a sophisticated multi-stage pipeline to ensure data integrity
 
 ---
 
-## �🛡️ Privacy & Security Architecture
+## Privacy & Security Architecture
 
 > [!IMPORTANT]
 > **Data Isolation Protocol**: Unlike standard AI tools, PolyDoc Chat generates embeddings locally. Your document's internal structure and metadata never leave your infrastructure. Only specific, encrypted text segments are sent to the inference engine during the final generation phase.
@@ -260,6 +274,138 @@ A detailed breakdown of every method used in the system and the evaluation metri
 | Average E2E Latency | Total time from upload → query → answer | 0.6948 seconds |
 | Minimum E2E Latency | Fastest full pipeline execution | 0.6222 seconds |
 | Maximum E2E Latency | Slowest full pipeline execution | 0.7454 seconds |
+
+---
+
+## Usage Examples
+
+### Step 1: Start the Application
+1. Open two terminals
+2. Terminal 1 (Backend):
+   ```bash
+   conda activate polydoc
+   python -m src_backend.main
+   ```
+3. Terminal 2 (Frontend):
+   ```bash
+   cd src_frontend
+   npm run dev
+   ```
+
+### Step 2: Upload Documents
+1. Open your browser and go to the frontend URL (usually `http://localhost:5173`)
+2. Click "Initialize" on the landing page
+3. Drag & drop your documents (PDF, DOCX, PPTX, CSV, TXT, Markdown) or click to select files
+4. Wait for the "Indexed successfully" message
+5. Click "Begin Session"
+
+### Step 3: Chat with Your Documents
+1. Type your question in the input box
+2. Press Enter or click the Send button
+3. Wait for the AI response with citations
+4. Click "Context Sources" to view the exact document segments used
+
+---
+
+## Project Structure
+
+```
+PolyDoc-Chat/
+├── src_ai/                      # AI core logic
+│   ├── core/                    # Configuration and utilities
+│   │   ├── config.py           # Settings management
+│   │   ├── logger.py           # Structured logging
+│   │   └── __init__.py
+│   ├── loaders/                # Document loaders
+│   │   ├── document_loaders.py # Multi-format loaders
+│   │   └── __init__.py
+│   ├── models/                 # Embedding models
+│   │   ├── embedder.py         # Local embedding generator
+│   │   └── __init__.py
+│   ├── retrievers/             # Vector search
+│   │   ├── simple_retriever.py # ChromaDB retriever
+│   │   └── __init__.py
+│   ├── services/               # RAG service
+│   │   ├── rag_service.py      # Groq query engine
+│   │   └── __init__.py
+│   ├── evaluation.py           # Evaluation module
+│   └── __init__.py
+├── src_backend/                # FastAPI backend
+│   ├── api/                    # API endpoints
+│   │   ├── upload.py           # Document upload
+│   │   ├── chat.py             # Chat endpoint
+│   │   └── __init__.py
+│   ├── core/                   # Backend utilities
+│   │   ├── config.py           # Backend settings
+│   │   ├── logger.py           # Logging
+│   │   ├── state.py            # Global state
+│   │   └── __init__.py
+│   ├── schemas/                # Pydantic models
+│   │   ├── api_models.py       # Request/response schemas
+│   │   └── __init__.py
+│   ├── main.py                 # FastAPI app entry point
+│   └── __init__.py
+├── src_frontend/               # React frontend
+│   ├── components/             # UI components
+│   │   ├── polydoc/            # Custom components
+│   │   └── ui/                 # ShadCN UI components
+│   ├── hooks/                  # Custom hooks
+│   ├── lib/                    # Utilities and API client
+│   ├── pages/                  # Page components
+│   ├── App.tsx                 # Main app component
+│   ├── main.tsx                # Frontend entry point
+│   └── ...
+├── proofs/                     # Screenshots for README
+├── test_data/                  # Temporary test files
+├── .gitignore
+├── requirements.txt            # Python dependencies
+├── package.json                # Node.js dependencies
+└── README.md
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues:
+
+1. **Backend won't start**:
+   - Make sure you have a `.env` file with `GROQ_API_KEY` set
+   - Check if port `8000` is already in use
+   - Verify all Python dependencies are installed: `pip install -r requirements.txt`
+
+2. **Frontend can't connect to backend**:
+   - Make sure backend is running on `http://localhost:8000`
+   - Check CORS settings in `src_backend/main.py`
+   - Verify no firewall is blocking the connection
+
+3. **Document upload fails**:
+   - Check if the file format is supported (PDF, DOCX, PPTX, CSV, TXT, Markdown)
+   - Make sure the file isn't corrupted
+   - Check backend logs for more details
+
+4. **AI says "No relevant information found"**:
+   - Make sure your question is about the content of uploaded documents
+   - Try rephrasing your question
+   - Check if documents were indexed successfully
+
+---
+
+## Acknowledgments
+
+This project uses these amazing open-source tools:
+- **LangChain**: For RAG pipeline orchestration
+- **ChromaDB**: For vector storage and retrieval
+- **Sentence-Transformers**: For local embedding generation
+- **Groq**: For fast Llama 3.3 inference
+- **FastAPI**: For the high-performance backend
+- **React**: For the modern frontend
+- **Tailwind CSS**: For styling
+- **ShadCN UI**: For UI components
+- **PyMuPDF**: For PDF loading
+- **pandas**: For CSV/Excel handling
+- **python-docx**: For DOCX loading
+- **python-pptx**: For PPTX loading
 
 ---
 
