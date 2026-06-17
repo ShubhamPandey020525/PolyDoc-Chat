@@ -146,17 +146,17 @@ The interface is engineered with a **bespoke Industrial Cyber-Luxe Midnight Them
 
 ---
 
-## 📊 Pipeline Methods & Evaluation Metrics
+## Pipeline Methods & Evaluation Metrics
 
 A detailed breakdown of every method used in the system and the evaluation metrics to measure performance:
 
-### 1. Document Loaders (`src_ai/loaders/document_loaders.py`)
+### 1. Document Loaders (src_ai/loaders/document_loaders.py)
 **Methods Implemented:**
-- **PDF Loading**: PyMuPDF (fitz) + ThreadPoolExecutor (parallel page extraction)
-- **Table Loading**: pandas for CSV/Excel files
-- **DOCX Loading**: python-docx for Word documents
-- **PPTX Loading**: python-pptx for PowerPoint slides
-- **TXT/Markdown**: Standard file I/O
+- PDF Loading: PyMuPDF (fitz) + ThreadPoolExecutor (parallel page extraction)
+- Table Loading: pandas for CSV/Excel files
+- DOCX Loading: python-docx for Word documents
+- PPTX Loading: python-pptx for PowerPoint slides
+- TXT/Markdown: Standard file I/O
 
 **Evaluation Metrics:**
 | Metric | Description |
@@ -170,10 +170,10 @@ A detailed breakdown of every method used in the system and the evaluation metri
 
 ### 2. Text Chunking
 **Methods Implemented:**
-- **Algorithm**: Recursive Character Text Splitter (LangChain)
-- **Chunk Size**: 1000 characters
-- **Chunk Overlap**: 100 characters
-- **Separators**: `["\n\n", "\n", " ", ""]` (hierarchical splitting to preserve context)
+- Algorithm: Recursive Character Text Splitter (LangChain)
+- Chunk Size: 1000 characters
+- Chunk Overlap: 100 characters
+- Separators: `["\n\n", "\n", " ", ""]` (hierarchical splitting to preserve context)
 
 **Evaluation Metrics:**
 | Metric | Description |
@@ -185,11 +185,11 @@ A detailed breakdown of every method used in the system and the evaluation metri
 
 ---
 
-### 3. Embedding Model (`src_ai/models/embedder.py`)
+### 3. Embedding Model (src_ai/models/embedder.py)
 **Methods Implemented:**
-- **Model**: `sentence-transformers/all-MiniLM-L6-v2` (384-dimensional vectors)
-- **Execution**: Local (CPU/GPU) for data privacy
-- **Library**: HuggingFace via LangChain
+- Model: `sentence-transformers/all-MiniLM-L6-v2` (384-dimensional vectors)
+- Execution: Local (CPU/GPU) for data privacy
+- Library: HuggingFace via LangChain
 
 **Evaluation Metrics:**
 | Metric | Description |
@@ -201,12 +201,12 @@ A detailed breakdown of every method used in the system and the evaluation metri
 
 ---
 
-### 4. Vector Database (`src_ai/retrievers/simple_retriever.py`)
+### 4. Vector Database (src_ai/retrievers/simple_retriever.py)
 **Methods Implemented:**
-- **Vector DB**: ChromaDB (lightweight, local persistence)
-- **Index Type**: Flat Index (default for Chroma)
-- **Similarity**: Cosine similarity
-- **Index Batching**: 128 chunks per batch for parallel indexing
+- Vector DB: ChromaDB (lightweight, local persistence)
+- Index Type: Flat Index (default for Chroma)
+- Similarity: Cosine similarity
+- Index Batching: 128 chunks per batch for parallel indexing
 
 **Evaluation Metrics:**
 | Metric | Description |
@@ -220,8 +220,8 @@ A detailed breakdown of every method used in the system and the evaluation metri
 
 ### 5. Retrieval System
 **Methods Implemented:**
-- **Retrieval Type**: Semantic similarity search
-- **Top-K**: 8 chunks per query
+- Retrieval Type: Semantic similarity search
+- Top-K: 8 chunks per query
 
 **Evaluation Metrics:**
 | Metric | Description |
@@ -234,12 +234,12 @@ A detailed breakdown of every method used in the system and the evaluation metri
 
 ---
 
-### 6. RAG Service & LLM (`src_ai/services/rag_service.py`)
+### 6. RAG Service & LLM (src_ai/services/rag_service.py)
 **Methods Implemented:**
-- **LLM**: Llama 3.3 70B (Groq API)
-- **Temperature**: 0.1 (low, for deterministic responses)
-- **Prompt Engineering**: Strict context-only instructions to prevent hallucinations
-- **Conversation History**: Optional multi-turn chat support
+- LLM: Llama 3.3 70B (Groq API)
+- Temperature: 0.1 (low, for deterministic responses)
+- Prompt Engineering: Strict context-only instructions to prevent hallucinations
+- Conversation History: Optional multi-turn chat support
 
 **Evaluation Metrics:**
 | Metric | Description |
@@ -263,56 +263,70 @@ A detailed breakdown of every method used in the system and the evaluation metri
 
 ---
 
-## � Performance Benchmarks
+## Performance Benchmarks
 
 Actual performance metrics from system evaluation (tested on local CPU):
 
 ### Document Loaders
-- Load time per document: **0.002 seconds**
-- Throughput: **446,745 characters/second**
-- Metadata preservation: **100%**
+| Metric | Value |
+|--------|-------|
+| Load time per document | 0.002 seconds |
+| Throughput | 446,745 characters/second |
+| Metadata preservation | 100% |
 
 ### Text Chunking
-- Chunking time per document: **0.0 seconds**
-- Chunks created: 1
-- Average chunk size: **883 characters**
-- Chunking algorithm: RecursiveCharacterTextSplitter (1000 chars, 100 overlap)
+| Metric | Value |
+|--------|-------|
+| Chunking time per document | 0.0 seconds |
+| Chunks created | 1 |
+| Average chunk size | 883 characters |
+| Chunking algorithm | RecursiveCharacterTextSplitter (1000 chars, 100 overlap) |
 
 ### Embedding Model
-- Embedding time per chunk: **0.1443 seconds**
-- Embedding dimension: **384**
-- Model: `sentence-transformers/all-MiniLM-L6-v2`
-- Device: CPU
+| Metric | Value |
+|--------|-------|
+| Embedding time per chunk | 0.1443 seconds |
+| Embedding dimension | 384 |
+| Model | sentence-transformers/all-MiniLM-L6-v2 |
+| Device | CPU |
 
 ### Vector Database
-- Indexing time: **0.1027 seconds**
-- Indexing throughput: **9.74 chunks/second**
-- Similarity: Cosine Similarity
-- Vector DB: ChromaDB
+| Metric | Value |
+|--------|-------|
+| Indexing time | 0.1027 seconds |
+| Indexing throughput | 9.74 chunks/second |
+| Similarity | Cosine Similarity |
+| Vector DB | ChromaDB |
 
 ### Retrieval System
-- Average retrieval time: **16.6 ms**
-- Minimum retrieval time: **14.16 ms**
-- Maximum retrieval time: **19.78 ms**
-- Top-K: 8 chunks
-- Retrieval type: Semantic Similarity Search
+| Metric | Value |
+|--------|-------|
+| Average retrieval time | 16.6 ms |
+| Minimum retrieval time | 14.16 ms |
+| Maximum retrieval time | 19.78 ms |
+| Top-K | 8 chunks |
+| Retrieval type | Semantic Similarity Search |
 
 ### RAG Service
-- Average generation time: **0.5354 seconds**
-- Minimum generation time: **0.3767 seconds**
-- Maximum generation time: **0.6492 seconds**
-- LLM: `llama-3.3-70b-versatile` (Groq)
-- Temperature: 0.1
-- Answers with citations: **100% (4/4)**
+| Metric | Value |
+|--------|-------|
+| Average generation time | 0.5354 seconds |
+| Minimum generation time | 0.3767 seconds |
+| Maximum generation time | 0.6492 seconds |
+| LLM | llama-3.3-70b-versatile (Groq) |
+| Temperature | 0.1 |
+| Answers with citations | 100% (4/4) |
 
 ### End-to-End System
-- Average E2E latency: **0.6948 seconds**
-- Minimum E2E latency: **0.6222 seconds**
-- Maximum E2E latency: **0.7454 seconds**
+| Metric | Value |
+|--------|-------|
+| Average E2E latency | 0.6948 seconds |
+| Minimum E2E latency | 0.6222 seconds |
+| Maximum E2E latency | 0.7454 seconds |
 
 ---
 
-## �🚀 Deployment & Local Setup
+## Deployment & Local Setup
 
 Follow these steps to initialize the PolyDoc Intelligent Core on your local infrastructure:
 
