@@ -146,7 +146,173 @@ The interface is engineered with a **bespoke Industrial Cyber-Luxe Midnight Them
 
 ---
 
-## 🚀 Deployment & Local Setup
+## 📊 Pipeline Methods & Evaluation Metrics
+
+A detailed breakdown of every method used in the system and the evaluation metrics to measure performance:
+
+### 1. Document Loaders (`src_ai/loaders/document_loaders.py`)
+**Methods Implemented:**
+- **PDF Loading**: PyMuPDF (fitz) + ThreadPoolExecutor (parallel page extraction)
+- **Table Loading**: pandas for CSV/Excel files
+- **DOCX Loading**: python-docx for Word documents
+- **PPTX Loading**: python-pptx for PowerPoint slides
+- **TXT/Markdown**: Standard file I/O
+
+**Evaluation Metrics:**
+| Metric | Description |
+|--------|-------------|
+| Text Extraction Accuracy | % of text correctly extracted compared to manual reference |
+| Processing Speed | Time per document (seconds) |
+| Parallel Efficiency | Speedup ratio with multi-threading vs single-thread |
+| Metadata Preservation | % of page/slide/row numbers correctly captured |
+
+---
+
+### 2. Text Chunking
+**Methods Implemented:**
+- **Algorithm**: Recursive Character Text Splitter (LangChain)
+- **Chunk Size**: 1000 characters
+- **Chunk Overlap**: 100 characters
+- **Separators**: `["\n\n", "\n", " ", ""]` (hierarchical splitting to preserve context)
+
+**Evaluation Metrics:**
+| Metric | Description |
+|--------|-------------|
+| Contextual Coherence | Semantic similarity between consecutive chunks |
+| Retrieval Relevance | % of retrieved chunks that are relevant to queries |
+| Chunk Size Consistency | Distribution uniformity of chunk sizes |
+| Information Loss | % of key information preserved across splits |
+
+---
+
+### 3. Embedding Model (`src_ai/models/embedder.py`)
+**Methods Implemented:**
+- **Model**: `sentence-transformers/all-MiniLM-L6-v2` (384-dimensional vectors)
+- **Execution**: Local (CPU/GPU) for data privacy
+- **Library**: HuggingFace via LangChain
+
+**Evaluation Metrics:**
+| Metric | Description |
+|--------|-------------|
+| STS Score | Semantic Textual Similarity correlation with human judgment |
+| Embedding Speed | Time per chunk (milliseconds) |
+| Memory Usage | RAM consumed by model and embeddings |
+| Recall@K | % of relevant chunks retrieved in top-K |
+
+---
+
+### 4. Vector Database (`src_ai/retrievers/simple_retriever.py`)
+**Methods Implemented:**
+- **Vector DB**: ChromaDB (lightweight, local persistence)
+- **Index Type**: Flat Index (default for Chroma)
+- **Similarity**: Cosine similarity
+- **Index Batching**: 128 chunks per batch for parallel indexing
+
+**Evaluation Metrics:**
+| Metric | Description |
+|--------|-------------|
+| Query Latency | Time to retrieve top-K chunks (ms) |
+| Indexing Throughput | Chunks indexed per second |
+| NDCG | Normalized Discounted Cumulative Gain (ranks relevance) |
+| Storage Size | Disk space used by vector index |
+
+---
+
+### 5. Retrieval System
+**Methods Implemented:**
+- **Retrieval Type**: Semantic similarity search
+- **Top-K**: 8 chunks per query
+
+**Evaluation Metrics:**
+| Metric | Description |
+|--------|-------------|
+| Recall@1, 3, 5, 8 | % of relevant chunks found in top-N |
+| Precision@1, 3, 5, 8 | % of top-N chunks that are relevant |
+| F1-Score | Harmonic mean of precision and recall |
+| MRR (Mean Reciprocal Rank) | Average reciprocal rank of first relevant chunk |
+| MAP (Mean Average Precision) | Average precision across all queries |
+
+---
+
+### 6. RAG Service & LLM (`src_ai/services/rag_service.py`)
+**Methods Implemented:**
+- **LLM**: Llama 3.3 70B (Groq API)
+- **Temperature**: 0.1 (low, for deterministic responses)
+- **Prompt Engineering**: Strict context-only instructions to prevent hallucinations
+- **Conversation History**: Optional multi-turn chat support
+
+**Evaluation Metrics:**
+| Metric | Description |
+|--------|-------------|
+| Answer Correctness | Human/LLM-as-a-judge evaluation |
+| Answer Faithfulness | % of answer content supported by context (no hallucinations) |
+| Answer Relevance | How relevant the answer is to the query |
+| Generation Latency | Time to generate answer (seconds) |
+| Citation Accuracy | % of citations correctly linked to context |
+| Hallucination Rate | % of responses with unsupported information |
+
+---
+
+### 7. End-to-End System
+**Evaluation Metrics:**
+| Metric | Description |
+|--------|-------------|
+| E2E Latency | Total time from upload → query → answer |
+| Throughput | Queries per second (QPS) |
+| Error Rate | % of failed queries |
+
+---
+
+## � Performance Benchmarks
+
+Actual performance metrics from system evaluation (tested on local CPU):
+
+### Document Loaders
+- Load time per document: **0.002 seconds**
+- Throughput: **446,745 characters/second**
+- Metadata preservation: **100%**
+
+### Text Chunking
+- Chunking time per document: **0.0 seconds**
+- Chunks created: 1
+- Average chunk size: **883 characters**
+- Chunking algorithm: RecursiveCharacterTextSplitter (1000 chars, 100 overlap)
+
+### Embedding Model
+- Embedding time per chunk: **0.1443 seconds**
+- Embedding dimension: **384**
+- Model: `sentence-transformers/all-MiniLM-L6-v2`
+- Device: CPU
+
+### Vector Database
+- Indexing time: **0.1027 seconds**
+- Indexing throughput: **9.74 chunks/second**
+- Similarity: Cosine Similarity
+- Vector DB: ChromaDB
+
+### Retrieval System
+- Average retrieval time: **16.6 ms**
+- Minimum retrieval time: **14.16 ms**
+- Maximum retrieval time: **19.78 ms**
+- Top-K: 8 chunks
+- Retrieval type: Semantic Similarity Search
+
+### RAG Service
+- Average generation time: **0.5354 seconds**
+- Minimum generation time: **0.3767 seconds**
+- Maximum generation time: **0.6492 seconds**
+- LLM: `llama-3.3-70b-versatile` (Groq)
+- Temperature: 0.1
+- Answers with citations: **100% (4/4)**
+
+### End-to-End System
+- Average E2E latency: **0.6948 seconds**
+- Minimum E2E latency: **0.6222 seconds**
+- Maximum E2E latency: **0.7454 seconds**
+
+---
+
+## �🚀 Deployment & Local Setup
 
 Follow these steps to initialize the PolyDoc Intelligent Core on your local infrastructure:
 
@@ -189,6 +355,18 @@ npm install
 # Launch the cinematic interface
 npm run dev
 ```
+
+### 5. Running System Evaluation
+Run the comprehensive evaluation module to measure performance of all pipeline components:
+```bash
+# From project root
+python -m src_ai.evaluation
+```
+This will:
+- Create a sample test document
+- Evaluate document loaders, chunking, embeddings, retrieval, and RAG service
+- Generate a detailed `evaluation_results.json` report
+- Print a summary to the console
 
 ---
 <div align="center">

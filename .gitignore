@@ -59,6 +59,7 @@ chroma_db/
 pinecone_cache/
 sample_docs/
 data/
+test_data/
 *.pdf
 *.csv
 *.xlsx
